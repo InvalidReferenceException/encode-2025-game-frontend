@@ -1,17 +1,51 @@
+import { useEffect, useState } from "react";
 import { useGameContext } from "./context/useGame"
+import CraftModal from "./CraftModal";
 
   
   export default function Hud() {
       const {
         player,
-        world
+        world,
+        setSelectedTile, setIsCraftModalOpen, isCraftModalOpen, selectedTile
       } = useGameContext()
+      // const [showCraft, setShowCraft] = useState(false)
+      useEffect(() => {
+        if (isCraftModalOpen && selectedTile) {
+          console.log('Modal is now open and tile is selected:', selectedTile)
+          // trigger animation, analytics, etc.
+        }
+      }, [isCraftModalOpen, selectedTile])
+      const handleCraft = (description: string) => {
+        console.log('Crafted tile:', description)
+        // Call backend / update world state
+      }
       
     return (
       <div style={styles.wrapper}>
-        <button onClick={()=>{}} style={styles.button}>
+        <button onClick={()=>{
+// modal with Craft tsx compoent
+          console.log("Crafting tile");
+          // setShowCraft(true)
+          // setSelectedTile(null)
+          // setIsCraftModalOpen(true)
+
+
+
+        }} style={styles.button}>
           ✨ Craft
         </button>
+        <CraftModal
+        open={isCraftModalOpen}
+        onClose={() => {
+          console.log("Closing Craft Modal");
+          setIsCraftModalOpen(false)
+          setSelectedTile(null)
+          // setShowCraft(false)
+
+        }}
+        onCraft={handleCraft}
+      />
   
         <button onClick={()=>{}} style={styles.widget}>
           🧱 Tiles: {player.tilesOwned.length}

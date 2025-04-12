@@ -11,6 +11,7 @@ import PlayerTile from './PlayerTile'
 
 export default function Scene() {
   const { world, player, rentTile} = useGameContext()
+    const { setSelectedTile, setIsCraftModalOpen } = useGameContext()
   const getInput = useInputControl();
   return (
     <>
@@ -72,6 +73,11 @@ export default function Scene() {
         <VoidTile
           key={tile.id}
           tilePosition={[tile.position.x, tile.position.y]}
+          onSelect={() => {
+            console.log("tile selected on scene")
+            setSelectedTile(tile);
+            setIsCraftModalOpen(true);
+          }}
         />
       ))}
       </WorldMap>

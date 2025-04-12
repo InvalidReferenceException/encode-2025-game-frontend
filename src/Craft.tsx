@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameContext } from './context/useGame'
 
 type CraftProps = {
   onCraft: (description: string) => void
@@ -6,11 +7,18 @@ type CraftProps = {
 
 export default function Craft({ onCraft }: CraftProps) {
   const [input, setInput] = useState('')
+  const {craftTile, selectedTile, setIsCraftModalOpen} = useGameContext()
 
   const handleCraft = () => {
     if (input.trim()) {
       onCraft(input.trim())
       setInput('')
+      if (selectedTile){
+        craftTile(selectedTile, input.trim());
+        
+      }
+      setIsCraftModalOpen(false)
+
     }
   }
 

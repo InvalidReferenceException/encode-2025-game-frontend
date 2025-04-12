@@ -13,14 +13,19 @@ export type AssetProps = {
 }
 
 export type VoidTileProps = {
-  tilePosition?: [number, number]
+  tilePosition?: [number, number],
+  onSelect?: () => void
+  onDeselect?: () => void
 }
 
 export default function VoidTile({
   tilePosition = [0, 0],
+  onSelect = () => {},
+  onDeselect = () => {},
 }: VoidTileProps) {
 
   const [colliding, setColliding] = useState(false); 
+  
   
   return (
     <RigidBody colliders="cuboid" type="fixed" onCollisionEnter={()=>{
@@ -28,7 +33,11 @@ export default function VoidTile({
     }} onCollisionExit={()=>{
         console.log("Collision EXIT detected");
       }}>
-      <Tile position={tilePosition} size={1.0} color='black' />
+      <Tile position={tilePosition} size={1.0} color='black' onPointerUp={()=> {
+        console.log('Pointer UP detected!')
+        onSelect()
+        
+      }}/>
       <CuboidCollider
         args={[0.5, 1, 0.5]}
         position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall

@@ -12,19 +12,25 @@ import {
     player: PlayerData
     world: WorldData
     movePlayer: (position: WorldLocationData) => void
-    craftTile: (tile: TileData) => void
+    craftTile: (tile: TileData, prompt: string) => void
     rentTile: (tile: TileData) => void
     conquerTile: (tile: TileData) => void
     refreshPlayerFromBackend: () => void
     refreshWorldFromBackend: () => void
+    selectedTile: TileData | null
+    setSelectedTile: (tile: TileData | null) => void
+    isCraftModalOpen: boolean
+    setIsCraftModalOpen: (v: boolean) => void
   }
   
   const GameContext = createContext<GameContextType | undefined>(undefined)
   
   export function GameProvider({ children }: { children: ReactNode }) {
+    const [selectedTile, setSelectedTile] = useState<TileData | null>(null)
+const [isCraftModalOpen, setIsCraftModalOpen] = useState(false)
+
     const [player, setPlayer] = useState<PlayerData>({
       id: 'player-1',
-      walletId: '0xabc123',
       balance: 100,
       rentEarned: 0,
       tilesOwned: [{
@@ -139,7 +145,7 @@ import {
       }
     }, [player.id])
 
-    const craftTile = useCallback(async (tile: TileData) => {
+    const craftTile = useCallback(async (tile: TileData, prompt: string) => {
       try {
         console.log("renting tile");
         if (tile.isYours == false && tile.rent){
@@ -172,9 +178,13 @@ import {
         refreshPlayerFromBackend,
         refreshWorldFromBackend,
         craftTile,
-        conquerTile
+        conquerTile,
+        selectedTile,
+        setSelectedTile,
+        isCraftModalOpen,
+        setIsCraftModalOpen,
       }),
-      [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend]
+      [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend, selectedTile, setSelectedTile, isCraftModalOpen, setIsCraftModalOpen]
     )
   
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>
