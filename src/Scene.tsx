@@ -10,7 +10,7 @@ import PlayerTile from './PlayerTile'
 
 
 export default function Scene() {
-  const { world, player } = useGameContext()
+  const { world, player, rentTile} = useGameContext()
   const getInput = useInputControl();
   return (
     <>
@@ -36,6 +36,7 @@ export default function Scene() {
                   textureUrl={tile.textureUrl}
                   tilePosition={[tile.position.x, tile.position.y]}
                   isYours={tile.isYours}
+
                   // modelUrl={tile.modelUrl}
                   // isYours={tile.isYours}
                 />
@@ -46,8 +47,11 @@ export default function Scene() {
           textureUrl={tile.textureUrl}
           tilePosition={[tile.position.x, tile.position.y]}
           isYours={tile.isYours}
+          onPlayerEnter={() => {
+            console.log("player enter on scene")
+            rentTile(tile);
+          }}
           // modelUrl={tile.modelUrl}
-          // isYours={tile.isYours}
         />
       ) : (
         <VoidTile

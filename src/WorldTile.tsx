@@ -1,6 +1,7 @@
 import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Tile from './Tile'
+import { CuboidCollider, RigidBody } from '@react-three/rapier'
 
 export type AssetProps = {
   modelUrl: string
@@ -15,20 +16,50 @@ export type WorldTileProps = {
   // tileSize?: number
   assets?: AssetProps[]
   isYours:boolean
+  onPlayerEnter?: () => void
+  onPlayerExit?: () => void
 }
 
 export default function WorldTile({
   textureUrl,
   tilePosition = [0, 0],
   assets = [],
+  onPlayerEnter,
+  onPlayerExit
 }: WorldTileProps) {
   return (
-    <group>
+        <RigidBody colliders="cuboid" type="fixed"
+        onIntersectionEnter={()=>{
+          console.log('Intersection ENTER detected!')
+          if (onPlayerEnter) {
+            onPlayerEnter()
+          }
+      }}
+onIntersectionExit={()=>{
+          console.log("Intersection EXIT detected");
+          if (onPlayerExit) {
+              onPlayerExit();
+            }
+          }}>
       <Tile position={tilePosition} size={1.0} textureUrl={textureUrl} color='red' />
       {assets.map((asset, index) => (
         <AssetInstance key={index} {...asset} />
       ))}
-    </group>
+        <CuboidCollider
+           args={[0.5, 1, 0.5]}
+           position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall
+           sensor={true}
+         />
+           {/* <SpotLight
+           position={[tilePosition[0], 3, tilePosition[1]]}
+           // target={targetRef}
+           angle={0.5}
+           attenuation={5}
+           anglePower={4}
+           intensity={colliding ? 5 : 0}
+           color={"red"}
+         /> */}
+       </RigidBody>
   )
 }
 

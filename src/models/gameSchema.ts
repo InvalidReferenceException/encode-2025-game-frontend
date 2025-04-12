@@ -1,29 +1,29 @@
 // types.ts or inside GameProvider.tsx
-export type Tile = {
+export type TileData = {
     isYours: boolean // whether the tile is owned by the player
     isOwned: boolean
     id: string // unique identifier for the tile
     ownerId?: string // optional player or wallet ID
     rent?: number // rent per use
-    position: WorldLocation
+    position: WorldLocationData
     textureUrl: string // texture image
     modelUrl: string // 3D model .glb
   }
 
-export type Player = {
+export type PlayerData = {
     id: string // unique identifier for the player
     walletId: string // wallet address
     balance: number // in-game currency
     rentEarned: number
-    tilesOwned: Tile[] // list of owned tiles
-    currentTilePosition: Tile
+    tilesOwned: TileData[] // list of owned tiles
+    currentTilePosition: TileData
 }
 
-export type World = {
-    tiles: Tile[] // list of tiles in the world
+export type WorldData = {
+    tiles: TileData[] // list of tiles in the world
 }
 
-export type WorldLocation = {
+export type WorldLocationData = {
     x: number // x coordinate
     y: number // y coordinate
 }

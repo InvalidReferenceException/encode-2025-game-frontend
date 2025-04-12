@@ -6,13 +6,15 @@ import {
     useMemo,
     useCallback,
   } from 'react'
-  import type { Player, Tile, World, WorldLocation } from '../models/gameSchema'
+  import type { PlayerData, TileData, WorldData, WorldLocationData } from '../models/gameSchema'
   
   type GameContextType = {
-    player: Player
-    world: World
-    movePlayer: (position: WorldLocation) => void
-    claimTile: (tile: Tile) => void
+    player: PlayerData
+    world: WorldData
+    movePlayer: (position: WorldLocationData) => void
+    craftTile: (tile: TileData) => void
+    rentTile: (tile: TileData) => void
+    conquerTile: (tile: TileData) => void
     refreshPlayerFromBackend: () => void
     refreshWorldFromBackend: () => void
   }
@@ -20,7 +22,7 @@ import {
   const GameContext = createContext<GameContextType | undefined>(undefined)
   
   export function GameProvider({ children }: { children: ReactNode }) {
-    const [player, setPlayer] = useState<Player>({
+    const [player, setPlayer] = useState<PlayerData>({
       id: 'player-1',
       walletId: '0xabc123',
       balance: 100,
@@ -46,7 +48,7 @@ import {
     },
 )
   
-    const [world, setWorld] = useState<World>({
+    const [world, setWorld] = useState<WorldData>({
       tiles: [{
         isYours: true,
         isOwned: true,
@@ -54,7 +56,7 @@ import {
         id: "zz3hihf",
         position: {x: 0, y: 0},
         textureUrl: "",
-        modelUrl: ""
+        modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb"
        },
        {
         isYours: false,
@@ -106,36 +108,58 @@ import {
     ],
     })
   
-    const movePlayer = useCallback((position: WorldLocation) => {
+    const movePlayer = useCallback((position: WorldLocationData) => {
       setPlayer(prev => ({ ...prev, position }))
     }, [])
   
-    const claimTile = useCallback(async (tile: Tile) => {
+    const rentTile = useCallback(async (tile: TileData) => {
       try {
-        // Send claim request to backend
-        await fetch(`/api/claim-tile`, {
-          method: 'POST',
-          body: JSON.stringify({ playerId: player.id, tileId: tile.id }),
-          headers: { 'Content-Type': 'application/json' },
-        })
-  
-        // On success, refresh world and player
-        refreshPlayerFromBackend()
-        refreshWorldFromBackend()
+        console.log("renting tile");
+        if (tile.isYours == false && tile.rent){
+          setPlayer(prev => ({
+            ...prev,
+            balance: prev.balance - tile.rent!,
+          }));
+        }
+
       } catch (err) {
         console.error('Failed to claim tile:', err)
       }
     }, [player.id])
   
+    const conquerTile = useCallback(async (tile: TileData) => {
+      try {
+        console.log("renting tile");
+        if (tile.isYours == false && tile.rent){
+          player.balance -= tile.rent;
+        }
+
+      } catch (err) {
+        console.error('Failed to claim tile:', err)
+      }
+    }, [player.id])
+
+    const craftTile = useCallback(async (tile: TileData) => {
+      try {
+        console.log("renting tile");
+        if (tile.isYours == false && tile.rent){
+          player.balance -= tile.rent;
+        }
+
+      } catch (err) {
+        console.error('Failed to claim tile:', err)
+      }
+    }, [player.id])
+
     const refreshPlayerFromBackend = useCallback(async () => {
       const res = await fetch(`/api/player/${player.id}`)
-      const data: Player = await res.json()
+      const data: PlayerData = await res.json()
       setPlayer(data)
     }, [player.id])
   
     const refreshWorldFromBackend = useCallback(async () => {
       const res = await fetch(`/api/world`)
-      const data: World = await res.json()
+      const data: WorldData = await res.json()
       setWorld(data)
     }, [])
   
@@ -144,11 +168,13 @@ import {
         player,
         world,
         movePlayer,
-        claimTile,
+        rentTile,
         refreshPlayerFromBackend,
         refreshWorldFromBackend,
+        craftTile,
+        conquerTile
       }),
-      [player, world, movePlayer, claimTile, refreshPlayerFromBackend, refreshWorldFromBackend]
+      [player, world, movePlayer, rentTile,craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend]
     )
   
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>
