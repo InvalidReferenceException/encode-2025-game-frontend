@@ -14,6 +14,7 @@ export type WorldTileProps = {
   tilePosition?: [number, number]
   // tileSize?: number
   assets?: AssetProps[]
+  isYours:boolean
 }
 
 export default function WorldTile({

@@ -1,30 +1,24 @@
-type HudProps = {
-    onOpenCraft: () => void
-    onOpenInventory: () => void
-    onOpenBank: () => void
-    tileCount: number
-    bankBalance: number
-  }
+import { useGameContext } from "./context/useGame"
+
   
-  export default function Hud({
-    onOpenCraft,
-    onOpenInventory,
-    onOpenBank,
-    tileCount,
-    bankBalance,
-  }: HudProps) {
+  export default function Hud() {
+      const {
+        player,
+        world
+      } = useGameContext()
+      
     return (
       <div style={styles.wrapper}>
-        <button onClick={onOpenCraft} style={styles.button}>
+        <button onClick={()=>{}} style={styles.button}>
           ✨ Craft
         </button>
   
-        <button onClick={onOpenInventory} style={styles.widget}>
-          🧱 Tiles: {tileCount}
+        <button onClick={()=>{}} style={styles.widget}>
+          🧱 Tiles: {player.tilesOwned.length}
         </button>
   
-        <button onClick={onOpenBank} style={styles.widget}>
-          🏦 Bank: {bankBalance}
+        <button onClick={()=>{}} style={styles.widget}>
+          🏦 Bank: {player.balance}
         </button>
       </div>
     )
