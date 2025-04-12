@@ -4,11 +4,14 @@ import WorldMap from './WorldMap'
 import WorldTile from './WorldTile'
 import VoidTile from './VoidTile'
 import { useGameContext } from './context/useGame'
-import Player from './Player'
+import { Player } from './Player'
+import { useInputControl } from './useInputControl'
+import PlayerTile from './PlayerTile'
 
 
 export default function Scene() {
   const { world, player } = useGameContext()
+  const getInput = useInputControl();
   return (
     <>
       {/* <OrbitControls makeDefault/> */}
@@ -17,14 +20,25 @@ export default function Scene() {
         <boxGeometry args={[2, 2, 2]} />
         <meshStandardMaterial/>
       </mesh> */}
-    <Player initialPosition={[player.position.x, player.position.y, 0]} />
+    <Player  input={getInput}/>
       <Sky />
       {/* <FlyControls /> */}
       <ambientLight intensity={100.0} />
       <directionalLight color="red" position={[0, 0, 5]} />
 
       <WorldMap>
-      {world.tiles.map(tile =>  tile.isOwned ? (
+      {world.tiles.map(tile =>  tile.isOwned ? tile.isYours ?
+              (
+                <PlayerTile
+                  key={tile.id}
+                  textureUrl={tile.textureUrl}
+                  tilePosition={[tile.position.x, tile.position.y]}
+                  isYours={tile.isYours}
+                  // modelUrl={tile.modelUrl}
+                  // isYours={tile.isYours}
+                />
+              ) :
+       (
         <WorldTile
           key={tile.id}
           textureUrl={tile.textureUrl}

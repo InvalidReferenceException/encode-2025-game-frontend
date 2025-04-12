@@ -9,7 +9,7 @@ export type AssetProps = {
   rotation?: [number, number, number]
 }
 
-export type WorldTileProps = {
+export type PlayerTileProps = {
   textureUrl: string
   tilePosition?: [number, number]
   // tileSize?: number
@@ -17,14 +17,14 @@ export type WorldTileProps = {
   isYours:boolean
 }
 
-export default function WorldTile({
+export default function PlayerTile({
   textureUrl,
   tilePosition = [0, 0],
   assets = [],
-}: WorldTileProps) {
+}: PlayerTileProps) {
   return (
     <group>
-      <Tile position={tilePosition} size={1.0} textureUrl={textureUrl} color='red' />
+      <Tile position={tilePosition} size={1.0} textureUrl={textureUrl} color='green' />
       {assets.map((asset, index) => (
         <AssetInstance key={index} {...asset} />
       ))}

@@ -18,7 +18,7 @@ export default function Game() {
     <div id="canvas-container" style={{ height: '100vh', width: '100vw' }}>
       <Hud/>
       <Canvas>
-        <OrbitControls/>
+        {/* <OrbitControls/> */}
         <Suspense>
           <Physics gravity={[0, 0.0, 0]}>
             

@@ -16,7 +16,7 @@ export type Player = {
     balance: number // in-game currency
     rentEarned: number
     tilesOwned: Tile[] // list of owned tiles
-    position: WorldLocation
+    currentTilePosition: Tile
 }
 
 export type World = {

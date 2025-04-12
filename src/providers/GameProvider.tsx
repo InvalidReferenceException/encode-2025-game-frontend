@@ -34,7 +34,15 @@ import {
        textureUrl: "",
        modelUrl: ""
       }],
-      position: { x: 0, y: 0 },
+      currentTilePosition:{
+        isYours: true,
+        isOwned: true,
+        rent: 20,
+        id: "zz3hihf",
+        position: {x: 0, y: 0},
+        textureUrl: "",
+        modelUrl: ""
+       },
     },
 )
   

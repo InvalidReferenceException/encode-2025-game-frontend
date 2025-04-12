@@ -23,7 +23,7 @@ export default function WorldTile({
     }} onCollisionExit={()=>{
         console.log("Collision EXIT detected");
     }}>
-      <Tile position={tilePosition} size={1.0} />
+      <Tile position={tilePosition} size={1.0} color='black' />
     </RigidBody>
   )
 }
