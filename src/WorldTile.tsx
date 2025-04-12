@@ -14,7 +14,7 @@ export type WorldTileProps = {
   textureUrl: string
   tilePosition?: [number, number]
   // tileSize?: number
-  assets?: AssetProps[]
+  assetUrl?:string
   isYours:boolean
   onPlayerEnter?: () => void
   onPlayerExit?: () => void
@@ -23,7 +23,7 @@ export type WorldTileProps = {
 export default function WorldTile({
   textureUrl,
   tilePosition = [0, 0],
-  assets = [],
+  assetUrl,
   onPlayerEnter,
   onPlayerExit
 }: WorldTileProps) {
@@ -42,9 +42,12 @@ onIntersectionExit={()=>{
             }
           }}>
       <Tile position={tilePosition} size={1.0} textureUrl={textureUrl} color='red' />
-      {assets.map((asset, index) => (
-        <AssetInstance key={index} {...asset} />
-      ))}
+      {assetUrl && (
+        <AssetInstance
+          modelUrl={assetUrl}
+          position={[tilePosition[0], 0.1, tilePosition[1]]} // Centered on tile
+        />
+      )}
         <CuboidCollider
            args={[0.5, 1, 0.5]}
            position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall
@@ -65,7 +68,7 @@ onIntersectionExit={()=>{
 
 function AssetInstance({
   modelUrl,
-  position = [0, 0.1, 0], // slightly above tile
+  position = [0, 0.1, 0], // Centered by default
   scale = [1, 1, 1],
   rotation = [0, 0, 0],
 }: AssetProps) {

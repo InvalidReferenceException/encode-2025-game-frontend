@@ -66,7 +66,7 @@ import {
         id: "123h6kkf",
         position: {x: 0, y: 1},
         textureUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//tile_1.png",
-        modelUrl: ""
+        modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb"
        },
        {
         isYours: false,
@@ -76,7 +76,7 @@ import {
         id: "123h644hf",
         position: {x: 1, y: 0},
         textureUrl: "",
-        modelUrl: ""
+        modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb"
        },
        {
         isYours: false,
@@ -174,7 +174,7 @@ import {
         craftTile,
         conquerTile
       }),
-      [player, world, movePlayer, rentTile,craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend]
+      [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend]
     )
   
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>

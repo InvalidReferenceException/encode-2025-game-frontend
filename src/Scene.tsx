@@ -36,6 +36,7 @@ export default function Scene() {
                   textureUrl={tile.textureUrl}
                   tilePosition={[tile.position.x, tile.position.y]}
                   isYours={tile.isYours}
+                  assetUrl={tile.modelUrl}
 
                   // modelUrl={tile.modelUrl}
                   // isYours={tile.isYours}
@@ -47,6 +48,7 @@ export default function Scene() {
           textureUrl={tile.textureUrl}
           tilePosition={[tile.position.x, tile.position.y]}
           isYours={tile.isYours}
+          assetUrl={tile.modelUrl}
           onPlayerEnter={() => {
             console.log("player enter on scene")
             rentTile(tile);

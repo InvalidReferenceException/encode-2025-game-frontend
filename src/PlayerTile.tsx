@@ -1,6 +1,7 @@
 import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Tile from './Tile'
+import { RigidBody } from '@react-three/rapier'
 
 export type AssetProps = {
   modelUrl: string
@@ -12,29 +13,47 @@ export type AssetProps = {
 export type PlayerTileProps = {
   textureUrl: string
   tilePosition?: [number, number]
-  // tileSize?: number
-  assets?: AssetProps[]
-  isYours:boolean
+  assetUrl?:string
+  isYours:boolean,
+  onPlayerEnter?: () => void
+  onPlayerExit?: () => void
 }
 
 export default function PlayerTile({
   textureUrl,
+  assetUrl,
   tilePosition = [0, 0],
-  assets = [],
+  onPlayerEnter,
+  onPlayerExit
 }: PlayerTileProps) {
   return (
-    <group>
+            <RigidBody colliders="cuboid" type="fixed"
+            onIntersectionEnter={()=>{
+              console.log('Intersection ENTER detected!')
+              if (onPlayerEnter) {
+                onPlayerEnter()
+              }
+          }}
+    onIntersectionExit={()=>{
+              console.log("Intersection EXIT detected");
+              if (onPlayerExit) {
+                  onPlayerExit();
+                }
+              }}>
       <Tile position={tilePosition} size={1.0} textureUrl={textureUrl} color='green' />
-      {assets.map((asset, index) => (
-        <AssetInstance key={index} {...asset} />
-      ))}
-    </group>
+      {assetUrl && (
+        <AssetInstance
+          modelUrl={assetUrl}
+          position={[tilePosition[0], 0.1, tilePosition[1]]} // Centered on tile
+        />
+      )}
+    </RigidBody>
   )
 }
 
 function AssetInstance({
   modelUrl,
-  position = [0, 0.1, 0], // slightly above tile
+  position = [0, 0.1, 0], // Centered by default
   scale = [1, 1, 1],
   rotation = [0, 0, 0],
 }: AssetProps) {
