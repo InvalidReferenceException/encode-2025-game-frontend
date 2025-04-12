@@ -55,7 +55,7 @@ export const Player = ({
     const position = api.current.translation(); // Get the player's current position from the RigidBody API.
     const { move, look, running } = input(); // Get current player input, including movement and camera look direction.
 
-    updateOrientation(look); // Update the player's camera orientation based on the camera look direction.
+    // updateOrientation(look); // Update the player's camera orientation based on the camera look direction.
 
     // Filter the scene's children to get all walkable objects (excluding the player's mesh).
     const walkable = scene.children.filter(
@@ -67,8 +67,10 @@ export const Player = ({
     offset
       .fromArray(move)
       .normalize()
-      .multiply(running ? speed.clone().multiplyScalar(2.5) : speed)
-      .applyQuaternion(yaw);
+      .multiply(running ? speed.clone().multiplyScalar(2.5) : speed);
+      // .applyQuaternion(yaw);
+
+
 
     api.current.setLinvel(offset, true);
 
@@ -76,12 +78,23 @@ export const Player = ({
     if (offset.z > 0 || offset.x > 0) {
       console.log("player position " + JSON.stringify(newPosition));
     }
-    camera.position.lerp(
-      newPosition.add(cameraOffset.clone().applyQuaternion(yaw)),
-      0.25
-    );
+    // camera.position.lerp(
+    //   newPosition.add(cameraOffset.clone().applyQuaternion(yaw)),
+    //   0.25
+    // );
 
-    camera.quaternion.copy(gaze);
+    // camera.quaternion.copy(gaze);
+    // Bird’s-eye view camera setup
+    const birdEyeOffset = new THREE.Vector3(0, 2, 1.0); ; // Camera 10 units above player
+
+// Smoothly move the camera above the player
+camera.position.lerp(
+  newPosition.clone().add(birdEyeOffset),
+  0.1
+);
+
+// Make camera look directly at the player
+camera.lookAt(newPosition);
   });
   return (
     <RigidBody
