@@ -4,10 +4,11 @@ import WorldMap from './WorldMap'
 import WorldTile from './WorldTile'
 import VoidTile from './VoidTile'
 import { useGameContext } from './context/useGame'
+import Player from './Player'
 
 
 export default function Scene() {
-  const { world } = useGameContext()
+  const { world, player } = useGameContext()
   return (
     <>
       {/* <OrbitControls makeDefault/> */}
@@ -16,7 +17,7 @@ export default function Scene() {
         <boxGeometry args={[2, 2, 2]} />
         <meshStandardMaterial/>
       </mesh> */}
-    
+    <Player initialPosition={[player.position.x, player.position.y, 0]} />
       <Sky />
       {/* <FlyControls /> */}
       <ambientLight intensity={100.0} />

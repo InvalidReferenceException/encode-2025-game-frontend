@@ -9,6 +9,8 @@ import Scene from './Scene'
 // import WorldTile from './WorldTile'
 // import tileData from './tileData'
 import { useGameContext } from '../providers/GameProvider'
+import { Suspense } from 'react'
+import { Physics } from '@react-three/rapier'
 
 export default function Game() {
 
@@ -17,7 +19,12 @@ export default function Game() {
       <Hud/>
       <Canvas>
         <OrbitControls/>
-        <Scene/>
+        <Suspense>
+          <Physics gravity={[0, 0.0, 0]}>
+            
+              <Scene/>
+          </Physics>
+        </Suspense>
       </Canvas>
     </div>
   )

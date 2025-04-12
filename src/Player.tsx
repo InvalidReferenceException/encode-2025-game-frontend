@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
-import { Inventory } from './Inventory'
-import { Bank } from './Bank'
 import { Vector3 } from 'three'
+import { BoxCollider, RigidBody } from '@react-three/rapier'
 
 type PlayerProps = {
   initialPosition?: [number, number, number]
@@ -11,9 +10,6 @@ type PlayerProps = {
 export default function Player({ initialPosition = [0, 0.1, 0], showModel = true }: PlayerProps) {
   const [position, setPosition] = useState<Vector3>(new Vector3(...initialPosition))
 
-  const inventory = useMemo(() => new Inventory(), [])
-  const bank = useMemo(() => new Bank(), [])
-
   // Example of moving the player
   const moveTo = (newPos: [number, number, number]) => {
     setPosition(new Vector3(...newPos))
@@ -21,6 +17,7 @@ export default function Player({ initialPosition = [0, 0.1, 0], showModel = true
 
   // Optional: Render a visual representation
   return (
+    <RigidBody colliders={"cuboid"}>
     <group position={position.toArray()}>
       {showModel && (
         <mesh>
@@ -29,5 +26,7 @@ export default function Player({ initialPosition = [0, 0.1, 0], showModel = true
         </mesh>
       )}
     </group>
+
+    </RigidBody>
   )
 }

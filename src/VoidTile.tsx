@@ -1,6 +1,7 @@
 import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Tile from './Tile'
+import { RigidBody } from '@react-three/rapier'
 
 export type AssetProps = {
   modelUrl: string
@@ -17,9 +18,13 @@ export default function WorldTile({
   tilePosition = [0, 0],
 }: VoidTileProps) {
   return (
-    <group>
+    <RigidBody colliders="cuboid" onCollisionEnter={()=>{
+        console.log('Collision ENTER detected!')
+    }} onCollisionExit={()=>{
+        console.log("Collision EXIT detected");
+    }}>
       <Tile position={tilePosition} size={1.0} />
-    </group>
+    </RigidBody>
   )
 }
 
