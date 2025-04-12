@@ -1,5 +1,5 @@
 // Game.tsx
-import { Sky} from '@react-three/drei'
+import { Environment, Sky} from '@react-three/drei'
 import WorldMap from './WorldMap'
 import WorldTile from './WorldTile'
 import VoidTile from './VoidTile'
@@ -21,9 +21,11 @@ export default function Scene() {
         <meshStandardMaterial/>
       </mesh> */}
     <Player  input={getInput}/>
-      <Sky />
+    
+      {/* <Sky /> */}
+      {/* <Environment /> */}
       {/* <FlyControls /> */}
-      <ambientLight intensity={100.0} />
+      <ambientLight intensity={5.0} />
       <directionalLight color="red" position={[0, 0, 5]} />
 
       <WorldMap>

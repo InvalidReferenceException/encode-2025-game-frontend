@@ -29,7 +29,7 @@ export const Player = ({
   const gaze = new Quaternion(); // Quaternion representing the direction the player character is looking at.
   const yaw = new Quaternion(); // Quaternion controlling horizontal rotations of the player's camera.
   const pitch = new Quaternion(); // Quaternion controlling vertical rotations of the player's camera.
-  const cameraOffset = new Vector3(0, 2, 3); // Vector representing the offset of the camera from the player's position.
+  const cameraOffset = new Vector3(0, 0.5, 1); // Vector representing the offset of the camera from the player's position.
   const down = new Vector3(0, -1, 0); // Vector pointing downwards, used for raycasting to determine ground collision.
   const yAxis = new Vector3(0, 1, 0); // Vector representing the world's y-axis.
   const xAxis = new Vector3(1, 0, 0); // Vector representing the world's x-axis.
@@ -47,6 +47,7 @@ export const Player = ({
     yaw.setFromAxisAngle(yAxis, phi); // Set the yaw quaternion based on horizontal rotation.
     pitch.setFromAxisAngle(xAxis, theta); // Set the pitch quaternion based on vertical rotation.
     gaze.multiplyQuaternions(yaw, pitch).normalize(); // Combine yaw and pitch to get the gaze direction.
+  
   };
 
   useFrame(() => {
@@ -72,6 +73,9 @@ export const Player = ({
     api.current.setLinvel(offset, true);
 
     const newPosition = new THREE.Vector3(position.x, position.y, position.z);
+    if (offset.z > 0 || offset.x > 0) {
+      console.log("player position " + JSON.stringify(newPosition));
+    }
     camera.position.lerp(
       newPosition.add(cameraOffset.clone().applyQuaternion(yaw)),
       0.25
@@ -83,14 +87,14 @@ export const Player = ({
     <RigidBody
       ref={api}
       lockRotations
-      position={[0, 0, 0]}
+      position={[0, 0.2, 0]}
       friction={5.0}
       restitution={0.5}
       colliders="ball"
     >
       <mesh ref={mesh} userData={{ tag: "player" }} castShadow>
-        <meshPhysicalMaterial metalness={0.5} roughness={0} color={"red"} />
-        <sphereGeometry args={[0.1, 0.5, 0.5]} />
+        <meshPhysicalMaterial metalness={0.5} roughness={0} color={"cyan"} />
+        <sphereGeometry args={[0.1, 100, 100]} />
       </mesh>
     </RigidBody>
   );
