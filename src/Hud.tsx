@@ -20,9 +20,30 @@ import CraftModal from "./CraftModal";
         console.log('Crafted tile:', description)
         // Call backend / update world state
       }
+
+      const { isAudioEnabled, setIsAudioEnabled } = useGameContext()
+
+      const handleEnableAudio = () => {
+        const AudioContext = window.AudioContext 
+        // || window.webkitAudioContext
+        const context = new AudioContext()
+    
+        if (context.state === 'suspended') {
+          context.resume().then(() => {
+            setIsAudioEnabled(true)
+            console.log('🎧 Audio enabled')
+          })
+        } else {
+          setIsAudioEnabled(!isAudioEnabled)
+          console.log('🎧 Audio already running')
+        }
+      }
       
     return (
       <div style={styles.wrapper}>
+            <button onClick={handleEnableAudio} style={styles.button}>
+      Enable Audio
+    </button>
         <button onClick={()=>{
 // modal with Craft tsx compoent
           console.log("Crafting tile");

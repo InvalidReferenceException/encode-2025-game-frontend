@@ -3,7 +3,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Tile from './Tile'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { useState } from 'react'
-import { SpotLight } from '@react-three/drei'
+import { PositionalAudio, SpotLight } from '@react-three/drei'
+import voidSound from './assets/sound/voidSound.mp3'
+import { useGameContext } from './context/useGame'
 
 export type AssetProps = {
   modelUrl: string
@@ -25,6 +27,7 @@ export default function VoidTile({
 }: VoidTileProps) {
 
   const [colliding, setColliding] = useState(false); 
+  const { isAudioEnabled } = useGameContext()
   
   
   return (
@@ -33,6 +36,16 @@ export default function VoidTile({
     }} onCollisionExit={()=>{
         console.log("Collision EXIT detected");
       }}>
+        {isAudioEnabled && <PositionalAudio
+        url={voidSound}
+        distance={0.5}
+        autoplay={true}
+    
+        loop
+        setMaxDistance={3}
+        setRolloffFactor={0.5}
+        // {...props} // All THREE.PositionalAudio props are valid
+      />}
       <Tile position={tilePosition} size={1.0} color='black' onPointerUp={()=> {
         console.log('Pointer UP detected!')
         onSelect()

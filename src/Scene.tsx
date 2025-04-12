@@ -45,7 +45,7 @@ export default function Scene() {
 /> */}
       <WorldMap>
       {world.tiles.map(tile =>  tile.isOwned ? tile.isYours ?
-              (
+              ( 
                 <PlayerTile
                   key={tile.id}
                   textureUrl={tile.textureUrl}
@@ -54,7 +54,7 @@ export default function Scene() {
                   assetUrl={tile.modelUrl}
                   // modelUrl={tile.modelUrl}
                   // isYours={tile.isYours}
-                />
+                />  
               ) :
        (
         <WorldTile

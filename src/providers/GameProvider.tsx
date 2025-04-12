@@ -20,7 +20,9 @@ import {
     selectedTile: TileData | null
     setSelectedTile: (tile: TileData | null) => void
     isCraftModalOpen: boolean
-    setIsCraftModalOpen: (v: boolean) => void
+    setIsCraftModalOpen: (v: boolean) => void,
+    isAudioEnabled: boolean
+    setIsAudioEnabled: (enabled: boolean) => void
   }
   
   const GameContext = createContext<GameContextType | undefined>(undefined)
@@ -28,6 +30,7 @@ import {
   export function GameProvider({ children }: { children: ReactNode }) {
     const [selectedTile, setSelectedTile] = useState<TileData | null>(null)
 const [isCraftModalOpen, setIsCraftModalOpen] = useState(false)
+const [isAudioEnabled, setIsAudioEnabled] = useState(false)
 
     const [player, setPlayer] = useState<PlayerData>({
       id: 'player-1',
@@ -183,8 +186,11 @@ const [isCraftModalOpen, setIsCraftModalOpen] = useState(false)
         setSelectedTile,
         isCraftModalOpen,
         setIsCraftModalOpen,
+        isAudioEnabled,
+        setIsAudioEnabled,
       }),
-      [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend, selectedTile, setSelectedTile, isCraftModalOpen, setIsCraftModalOpen]
+      [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend, selectedTile, setSelectedTile, isCraftModalOpen, setIsCraftModalOpen,   isAudioEnabled,
+        setIsAudioEnabled]
     )
   
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>

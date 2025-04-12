@@ -1,7 +1,20 @@
 
 // Tile.tsx
 import { useTexture } from '@react-three/drei'
+import { useRef } from 'react'
+
+import { useFrame, useLoader } from '@react-three/fiber'
+import { FloorVoidMaterial} from './materials/FloorVoidMaterial'
+
+
+
 import * as THREE from 'three'
+import { NormalizedAsset } from './NormalizedAsset'
+import { Texture, TextureLoader } from 'three'
+import { FloorGrassMaterial } from './materials/FloorGrassMaterial'
+import { FloorRockMaterial } from './materials/FloorRockMaterial'
+import { FloorSandMaterial } from './materials/FloorSandMaterial'
+import { FloorWaterMaterial } from './materials/FloorWaterMaterial'
 
 export type TileProps = {
   position?: [number, number]
@@ -15,6 +28,16 @@ export type TileProps = {
 // & MeshProps
 const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16)
 export default function Tile({ position = [0, 0], size = 1, textureUrl, color, onPointerDown, onPointerUp, ...props }: TileProps) {
+
+  
+  const materialRef = useRef(null)
+
+  useFrame(({ clock }) => {
+    if (materialRef.current) {
+      materialRef.current.uTime = clock.getElapsedTime()
+    }
+  })
+
   // const texture = useTexture(textureUrl)
 
   // texture.wrapS = texture.wrapT = THREE.RepeatWrapping
@@ -31,8 +54,22 @@ const finalColor = color ? color : randomColor();
     }>
       <planeGeometry args={[size, size]}  />
       {/* map={texture} */}
-      <meshStandardMaterial  color={finalColor} />
+      {/* <meshStandardMaterial  color={finalColor} /> */}
+      {/* <voidMaterial
+        key={VoidMaterial.key}
+        ref={materialRef}
+        // uColor1="black"
+        // uColor2="hotpink"
+        uTime={0} // will be updated in useFrame
+      /> */}
+    {/* <meshStandardMaterial map={texture} /> */}
+    {/* <FloorVoidMaterial /> */}
+    <FloorWaterMaterial/>
     </mesh>
+    <NormalizedAsset
+    url='/assets/glb_models/grass.glb'
+    size={0.1}
+    />
     </group>
   )
 }
