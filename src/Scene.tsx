@@ -22,12 +22,26 @@ export default function Scene() {
       </mesh> */}
     <Player  input={getInput}/>
     
+{/* <Environment
+  preset="sunset" // or "sunrise", "night", "dawn", "warehouse", "forest", "apartment", etc.
+  // background // sets scene.background = env map
+/> */}
       {/* <Sky /> */}
       {/* <Environment /> */}
       {/* <FlyControls /> */}
-      <ambientLight intensity={5.0} />
-      <directionalLight color="red" position={[0, 0, 5]} />
-
+      {/* <ambientLight intensity={5.0} /> */}
+      {/* <directionalLight color="red" position={[0, 0, 5]} /> */}
+      <color attach="background" args={['#202030']} />
+      <fog attach="fog" args={['#202030', 5, 20]} />
+{/* <ambientLight intensity={0.05} /> */}
+<directionalLight position={[10, 100, 5]} intensity={0.5} castShadow />
+      {/* <Sky
+  sunPosition={[10, 20, 10]}
+  turbidity={6}
+  rayleigh={1}
+  mieCoefficient={0.005}
+  mieDirectionalG={0.8}
+/> */}
       <WorldMap>
       {world.tiles.map(tile =>  tile.isOwned ? tile.isYours ?
               (
@@ -37,7 +51,6 @@ export default function Scene() {
                   tilePosition={[tile.position.x, tile.position.y]}
                   isYours={tile.isYours}
                   assetUrl={tile.modelUrl}
-
                   // modelUrl={tile.modelUrl}
                   // isYours={tile.isYours}
                 />

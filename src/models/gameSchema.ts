@@ -11,8 +11,7 @@ export type TileData = {
   }
 
 export type PlayerData = {
-    id: string // unique identifier for the player
-    walletId: string // wallet address
+    id: string // unique identifier for the player address
     balance: number // in-game currency
     rentEarned: number
     tilesOwned: TileData[] // list of owned tiles

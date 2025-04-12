@@ -108,6 +108,17 @@ camera.lookAt(newPosition);
       <mesh ref={mesh} userData={{ tag: "player" }} castShadow>
         <meshPhysicalMaterial metalness={0.5} roughness={0} color={"cyan"} />
         <sphereGeometry args={[0.1, 100, 100]} />
+          {/* Spotlight that follows the player */}
+        <spotLight
+          position={[0, 2, 0]} // Relative to the player
+          angle={0.3}
+          penumbra={0.5}
+          decay={3.0} 
+          distance={10.0}
+          intensity={8}
+          castShadow
+          target={mesh.current} // Look at the player
+        />
       </mesh>
     </RigidBody>
   );
