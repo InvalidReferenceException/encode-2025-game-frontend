@@ -21,9 +21,7 @@ export default function Hud() {
     }
   }, [isCraftModalOpen, selectedTile]);
 
-  const handleCraft = (description: string) => {
-    console.log("Crafted tile:", description);
-  };
+
 
   const handleEnableAudio = () => {
     const AudioContext = window.AudioContext;
@@ -68,7 +66,7 @@ export default function Hud() {
           setIsCraftModalOpen(false);
           setSelectedTile(null);
         }}
-        onCraft={handleCraft}
+        // onCraft={handleCraft}
       />
     </>
   );

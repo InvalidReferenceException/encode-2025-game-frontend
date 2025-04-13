@@ -56,25 +56,25 @@ const VoidShaderMaterial = shaderMaterial(
     float angle = atan(uv.y, uv.x);
     float radius = length(uv);
   
-    // Animate swirl
-    float swirlSpeed = 1.5;
-    float swirlDensity = 20.0;
-    float swirl = sin(angle * swirlDensity + radius * 10.0 - uTime * swirlSpeed);
+    // Chaotic swirl animation
+    float swirlSpeed = 6.0;
+    float swirlDensity = 40.0;
+    float swirl = sin(angle * swirlDensity - uTime * swirlSpeed + radius * 20.0);
   
-    // Spiral contrast modulation (between 0–1)
-    float mask = smoothstep(0.0, 0.5, swirl * 0.5 + 0.5);
+    // Sharp, chaotic bands
+    float band = step(0.0, swirl);
+    float glow = smoothstep(0.8, 0.2, radius);
   
-    // Glow falloff
-    float glow = smoothstep(0.4, 0.0, radius);
+    // Suck light into center
+    float blackHole = smoothstep(0.1, 0.0, radius); // very dark center
   
-    // Blend two colors based on spiral
-    vec3 spiralColor = mix(uColor1, uColor2, mask);
+    // Outer rim eerie purple glow
+    vec3 rimColor = uColor2 * (1.0 - blackHole) * glow * band;
   
-    // Fade out edges
-    vec3 finalColor = spiralColor * glow;
+    // Combine with crushed center
+    vec3 color = mix(rimColor, uColor1, blackHole);
   
-    // gl_FragColor = vec4(finalColor, 1.0 - radius * 1.5);
-    gl_FragColor = vec4(finalColor, 1.0);
+    gl_FragColor = vec4(color, 1.0);
   }
   `
 )

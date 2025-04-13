@@ -7,14 +7,17 @@ type CraftProps = {
 
 export default function Craft({ onCraft }: CraftProps) {
   const [input, setInput] = useState('')
-  const {craftTile, selectedTile, setIsCraftModalOpen} = useGameContext()
+  const {craftTile, selectedTile, setIsCraftModalOpen, setSelectedTile} = useGameContext()
 
   const handleCraft = () => {
+    console.log("Crafting tile 0");
     if (input.trim()) {
       onCraft(input.trim())
       setInput('')
       if (selectedTile){
         craftTile(selectedTile, input.trim());
+        console.log("Crafting tile");
+        setSelectedTile(null)
         
       }
       setIsCraftModalOpen(false)

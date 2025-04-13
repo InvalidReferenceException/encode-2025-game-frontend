@@ -132,7 +132,7 @@ camera.lookAt(newPosition);
         <spotLight
           position={[0, 2, 0]} // Relative to the player
           angle={0.3}
-          penumbra={0.5}
+          penumbra={0.2}
           decay={3.0} 
           distance={10.0}
           intensity={8}

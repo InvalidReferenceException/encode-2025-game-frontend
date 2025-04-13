@@ -1,19 +1,28 @@
 import { useState } from "react"
+import { useGameContext } from "./context/useGame"
 
 type CraftModalProps = {
   open: boolean
   onClose: () => void
-  onCraft: (description: string) => void
+  // onCraft: (description: string) => void
 }
 
-export default function CraftModal({ open, onClose, onCraft }: CraftModalProps) {
+export default function CraftModal({ open, onClose}: CraftModalProps) {
   const [input, setInput] = useState('')
+   const {craftTile, selectedTile, setIsCraftModalOpen, setSelectedTile} = useGameContext()
 
   const handleSubmit = () => {
+    console.log("Crafting tile 0");
     if (input.trim()) {
-      onCraft(input.trim())
       setInput('')
-      onClose()
+      if (selectedTile){
+        craftTile(selectedTile, input.trim());
+        console.log("Crafting tile");
+        setSelectedTile(null)
+        
+      }
+      setIsCraftModalOpen(false)
+
     }
   }
 

@@ -9,6 +9,7 @@ import {
   } from 'react'
   import type { PlayerData, TileData, WorldData, WorldLocationData } from '../models/gameSchema'
 import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor, TileUpdateSource, PlayerPosition } from '../models/tileFlavors'
+import demoWorldData from '../assets/demoWorldData.json'
   
   type GameContextType = {
     player: PlayerData
