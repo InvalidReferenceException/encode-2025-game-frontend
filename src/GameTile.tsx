@@ -19,20 +19,20 @@ type GameTileProps = {
 }
 
 // Helper to get material by tile flavor
-function getMaterialByFlavor(flavor: TileFlavor): JSX.Element {
+function getMaterialByFlavor(flavor: TileFlavor, isSelected: boolean, isColliding:boolean, isForeign: boolean ): JSX.Element {
     switch (flavor) {
         case TileFlavor.VOID:
-        return <FloorVoidMaterial />
+        return <FloorVoidMaterial isSelected={isSelected} isColliding={isColliding} />
       case TileFlavor.GRASS:
-        return <FloorGrassMaterial />
+        return <FloorGrassMaterial isSelected={isSelected} isColliding={isColliding} isForeign={isForeign} />
      case TileFlavor.ROCK:
-        return <FloorRockMaterial />
+        return <FloorRockMaterial  isSelected={isSelected} isColliding={isColliding} isForeign={isForeign} />
     case TileFlavor.SAND:
-        return <FloorSandMaterial />
+        return <FloorSandMaterial   isSelected={isSelected} isColliding={isColliding} isForeign={isForeign}/>
     case TileFlavor.WATER:
         return <FloorWaterMaterial />
       default:
-        return <FloorRockMaterial />
+        return <FloorRockMaterial  isSelected={isSelected} isColliding={isColliding} isForeign={isForeign}/>
     }
   }
 
@@ -207,7 +207,7 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     const isColliding = collidedTile?.id === tile.id
     const isCurrent = playerPositionTile?.tile.id === tile.id
 
-    const material = getMaterialByFlavor(tile.flavor)
+    const material = getMaterialByFlavor(tile.flavor, isSelected, isColliding, tile.ownership == TileOwnership.PLAYER)
     const playerAction = getTilePlayerAction(isSelected, isColliding, isCurrent)
     const effects = getEffectsForTile(tile.state, playerAction, tile.ownership == TileOwnership.WORLD)
     // getTilePlayerAction(tile.id),

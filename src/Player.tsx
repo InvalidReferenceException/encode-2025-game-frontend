@@ -105,7 +105,7 @@ export const Player = ({
 
     // camera.quaternion.copy(gaze);
     // Bird’s-eye view camera setup
-    const birdEyeOffset = new THREE.Vector3(0, 2, 1.0); ; // Camera 10 units above player
+    const birdEyeOffset = new THREE.Vector3(0, 1.0, 0.5); ; // Camera 10 units above player
 
 // Smoothly move the camera above the player
 camera.position.lerp(
@@ -127,7 +127,7 @@ camera.lookAt(newPosition);
     >
       <mesh ref={mesh} userData={{ tag: "player" }} castShadow>
         <meshPhysicalMaterial metalness={0.5} roughness={0} color={"cyan"} />
-        <sphereGeometry args={[0.1, 100, 100]} />
+        <sphereGeometry args={[0.05, 50, 50]} />
           {/* Spotlight that follows the player */}
         <spotLight
           position={[0, 2, 0]} // Relative to the player
