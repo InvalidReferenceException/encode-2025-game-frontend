@@ -50,19 +50,23 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
     switch (tileState) {
         case TileTransactionState.CRAFTING:
             effects.push(
-                <mesh key="crafting-ring" rotation={[-Math.PI / 2, 0, 0]}>
-                    <ringGeometry args={[0.45, 0.5, 32]} />
-                    <meshBasicMaterial color="orange" transparent opacity={0.4} />
+                <mesh key="crafting-ring">
+                  <TileBoxShell thickness={0.05} size={1.0} height={0.01} color="blue" opacity={0.9} emissive='#4b1a75' />
+                  {/* <group position={[0, 1.0, 0]}>
+                  <sphereGeometry args={[0.1, 100, 100]} />
+                  </group> */}
+                   {/* add sphere */}
+
                 </mesh>
             )
             break;
         case TileTransactionState.CRAFTING_COMPLETE:
-            effects.push(
-                <mesh key="crafting-ring" rotation={[-Math.PI / 2, 0, 0]}>
-                <ringGeometry args={[0.45, 0.5, 32]} />
-                <meshBasicMaterial color="green" transparent opacity={0.4} />
-            </mesh>
-            )
+            // effects.push(
+            //     <mesh key="crafting-ring" rotation={[-Math.PI / 2, 0, 0]}>
+            //     <ringGeometry args={[0.45, 0.5, 32]} />
+            //     <meshBasicMaterial color="green" transparent opacity={0.4} />
+            // </mesh>
+            // )
             break;
         case TileTransactionState.CRAFTING_REJECTED:
             effects.push(
@@ -73,21 +77,21 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
             )
             break;
         case TileTransactionState.RENTING:
-            effects.push(
-                <group>
-                <TileBoxShell thickness={0.1} size={1.0} height={0.01} color="blue" opacity={0.9} />
-                <mesh key="renting-ring" rotation={[-Math.PI / 2, 0, 0]}>
-                    <ringGeometry args={[0.45, 0.5, 32]} />
-                    <meshBasicMaterial color="blue" transparent opacity={0.4} />
-                </mesh>
-                <mesh key="renting-sphere" position={[0, 1.0, 0]}>
-                    {/* <sphereGeometry args={[0.1, 100, 100]} /> */}
-                    <NormalizedAsset url="/assets/glb_models/star.glb" scale={[10.1, 10.1, 10.1]} />
-                    <meshBasicMaterial color="white"/>
-                </mesh>
+            // effects.push(
+            //     <group>
+            //     <TileBoxShell thickness={0.05} size={1.0} height={0.01} color="blue" opacity={0.9} />
+            //     <mesh key="renting-ring" rotation={[-Math.PI / 2, 0, 0]}>
+            //         <ringGeometry args={[0.45, 0.5, 32]} />
+            //         <meshBasicMaterial color="blue" transparent opacity={0.4} />
+            //     </mesh>
+            //     <mesh key="renting-sphere" position={[0, 1.0, 0]}>
+            //         {/* <sphereGeometry args={[0.1, 100, 100]} /> */}
+            //         <NormalizedAsset url="/assets/glb_models/star.glb" scale={[10.1, 10.1, 10.1]} />
+            //         <meshBasicMaterial color="white"/>
+            //     </mesh>
 
-                </group>
-            )
+            //     </group>
+            // )
             break;
         case TileTransactionState.RENTING_REJECTED:
             effects.push(
@@ -100,8 +104,7 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
         case TileTransactionState.CONQUERING:
             effects.push(
                 <mesh key="conquering-ring" rotation={[-Math.PI / 2, 0, 0]}>
-                    <ringGeometry args={[0.45, 0.5, 32]} />
-                    <meshBasicMaterial color="purple" transparent opacity={0.4} />
+                       <TileBoxShell thickness={0.05} size={1.0} height={0.01} color="blue" opacity={0.9} emissive='#ad0244' />
                 </mesh>
             )
             break;
@@ -130,9 +133,8 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
     switch (playerAction) {
         case TilePlayerAction.SELECTED:
             effects.push(
-                <mesh key="selected-ring" rotation={[-Math.PI / 2, 0, 0]}>
-                    <ringGeometry args={[0.45, 0.5, 32]} />
-                    <meshBasicMaterial color="yellow" transparent opacity={0.4} />
+                <mesh key="selected-ring">
+                      <TileBoxShell thickness={0.05} size={1.0} height={0.01} color="blue" opacity={0.9} emissive='white' />
                 </mesh>
             )
             break;

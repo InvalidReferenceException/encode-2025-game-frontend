@@ -73,7 +73,8 @@ const VoidShaderMaterial = shaderMaterial(
     // Fade out edges
     vec3 finalColor = spiralColor * glow;
   
-    gl_FragColor = vec4(finalColor, 1.0 - radius * 1.5);
+    // gl_FragColor = vec4(finalColor, 1.0 - radius * 1.5);
+    gl_FragColor = vec4(finalColor, 1.0);
   }
   `
 )
