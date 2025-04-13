@@ -10,7 +10,6 @@ export type TileData = {
     ownership: TileOwnership // ownership type (void, world - meaning someone else, player)
     flavor: TileFlavor // additional data for tile flavor
     state: TileTransactionState // current state of the tile
-    playerAction: TilePlayerAction // action performed by the player
   }
 
 // tile material

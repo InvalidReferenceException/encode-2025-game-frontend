@@ -40,17 +40,7 @@ const [playerPositionTile, setPlayerPositionTile] = useState<PlayerPosition | nu
 const [isCraftModalOpen, setIsCraftModalOpen] = useState(false)
 const [isAudioEnabled, setIsAudioEnabled] = useState(false)
 
-function getTilePlayerAction(tileId: string): TilePlayerAction {
-  if (tileId === selectedTile?.id) {
-    return TilePlayerAction.SELECTED
-  } else if (tileId === collidedTile?.id) {
-    return TilePlayerAction.COLLIDED
-  } else if (tileId === playerPositionTile?.id) {
-    return TilePlayerAction.ENTERED
-  } else {
-    return TilePlayerAction.NONE
-  }
-}
+
 
     const [player, setPlayer] = useState<PlayerData>({
       id: 'player-1',
@@ -87,8 +77,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
         ownership: TileOwnership.PLAYER,
         flavor: TileFlavor.SAND,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("zz3hihf"),
+        state: TileTransactionState.IDLE
        },
        {
 
@@ -99,8 +88,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
         ownership: TileOwnership.WORLD,
         flavor: TileFlavor.SAND,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("123h6kkf"),
+        state: TileTransactionState.IDLE
        },
        {
         ownerId: "92u39jfo",
@@ -110,8 +98,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
         ownership: TileOwnership.WORLD,
         flavor: TileFlavor.GRASS,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("123h644hf"),
+        state: TileTransactionState.IDLE
        },
        {
         rent: 20,
@@ -120,8 +107,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
         ownership: TileOwnership.WORLD,
         flavor: TileFlavor.ROCK,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("12seslihf"),
+        state: TileTransactionState.IDLE
        },
        {
         rent: 20,
@@ -130,8 +116,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
         ownership: TileOwnership.WORLD,
         flavor: TileFlavor.WATER,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("12se2a4ihf"),
+        state: TileTransactionState.IDLE
        },
        {
         rent: 20,
@@ -140,8 +125,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "",
         ownership: TileOwnership.VOID,
         flavor: TileFlavor.VOID,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("12sesvihf"),
+        state: TileTransactionState.IDLE
        },
        {
         rent: 20,
@@ -150,8 +134,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         modelUrl: "",
         ownership: TileOwnership.VOID,
         flavor: TileFlavor.VOID,
-        state: TileTransactionState.IDLE,
-        playerAction: getTilePlayerAction("12se00vihf"),
+        state: TileTransactionState.IDLE
        }
     ],
     })
@@ -170,7 +153,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
     const rentTile = useCallback(async (tile: TileData) => {
       try {
         console.log("renting tile");
-        let newBalance = player.balance - (tile.rent ?? 0)
+        const notEnoughBalance = player.balance < (tile.rent ?? 0)
         if (tile.ownership == TileOwnership.WORLD && tile.rent){
           setWorld(prev => ({
             ...prev,
@@ -182,7 +165,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
           }));
           // add a timeout after which the tile either rents successfully or fails
           setTimeout(() => {
-            if (newBalance < 0) {
+            if (notEnoughBalance) {
             setWorld(prev => ({
               ...prev,
               tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.RENTING_REJECTED } : t),
@@ -310,11 +293,11 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         setIsAudioEnabled,
         playerPositionTile,
         setPlayerPositionTile,
-        getTilePlayerAction,
+
       
       }),
       [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend, selectedTile, setSelectedTile, isCraftModalOpen, setIsCraftModalOpen,   isAudioEnabled,
-        setIsAudioEnabled, playerPositionTile, setPlayerPositionTile, getTilePlayerAction]
+        setIsAudioEnabled, playerPositionTile, setPlayerPositionTile]
     )
   
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>

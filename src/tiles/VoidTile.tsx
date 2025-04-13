@@ -20,12 +20,16 @@ export type VoidTileProps = {
   effects?: React.ReactNode[],
   onSelect?: () => void
   onDeselect?: () => void
+  onCollide?: () => void
+  onUncollide?: () => void
 }
 
 export default function VoidTile({
   tilePosition,
   material,
   effects,
+  onCollide = () => {},
+  onUncollide = () => {},
   onSelect = () => {},
   onDeselect = () => {},
 }: VoidTileProps) {
@@ -41,9 +45,18 @@ export default function VoidTile({
     <RigidBody colliders="cuboid" type="fixed" onCollisionEnter={()=>{
         console.log('Collision ENTER detected!')
         setColliding(true)
+        if (onCollide){
+          console.log('onCollide called')
+          onCollide()
+        }
+
     }} onCollisionExit={()=>{
         console.log("Collision EXIT detected");
         setColliding(false)
+        if (onUncollide){
+          console.log('onUncollide called')
+          onUncollide()
+        }
       }}>
         {isAudioEnabled && <PositionalAudio
         url={voidSound}
@@ -58,7 +71,7 @@ export default function VoidTile({
       <Tile position={tilePosition} size={1.0} material={material} color='black' onPointerUp={()=> {
         console.log('Pointer UP detected!')
         // only allow selection if colliding
-        if (colliding){
+        if (colliding && onSelect) {
         onSelect()
         }
         

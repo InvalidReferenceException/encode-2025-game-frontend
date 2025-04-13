@@ -6,7 +6,7 @@ import { GameProvider } from './providers/GameProvider'
 
 function App() {
   // This reference gives us direct access to the THREE.Mesh object
-  const ref = useRef()
+  const ref = useRef(null)
 
   return (
 
