@@ -132,11 +132,11 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
 
     switch (playerAction) {
         case TilePlayerAction.SELECTED:
-            effects.push(
-                <mesh key="selected-ring">
-                      <TileBoxShell thickness={0.05} size={1.0} height={0.01} color="blue" opacity={0.9} emissive='white' />
-                </mesh>
-            )
+            // effects.push(
+            //     <mesh key="selected-ring">
+            //           <TileBoxShell thickness={0.05} size={1.0} height={0.01} color="blue" opacity={0.9} emissive='white' />
+            //     </mesh>
+            // )
             break;
         case TilePlayerAction.ENTERED:
             effects.push(
