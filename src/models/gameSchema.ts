@@ -1,9 +1,7 @@
-import { TileFlavor, TileOwnership, TilePlayerAction, TileMechanicState } from "./tileFlavors"
+import { TileFlavor, TileOwnership, TilePlayerAction,  TileTransactionState } from "./tileFlavors"
 
 // types.ts or inside GameProvider.tsx
 export type TileData = {
-    isYours: boolean // whether the tile is owned by the player
-    isOwned: boolean
     id: string // unique identifier for the tile
     ownerId?: string // optional player or wallet ID
     rent?: number // rent per use
@@ -11,7 +9,7 @@ export type TileData = {
     modelUrl: string // 3D model .glb
     ownership: TileOwnership // ownership type (void, world - meaning someone else, player)
     flavor: TileFlavor // additional data for tile flavor
-    state: TileMechanicState // current state of the tile
+    state: TileTransactionState // current state of the tile
     playerAction: TilePlayerAction // action performed by the player
   }
 

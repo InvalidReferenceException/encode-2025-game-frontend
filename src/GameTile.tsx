@@ -3,7 +3,7 @@ import { TileData } from './models/gameSchema'
 import VoidTile from './tiles/VoidTile'
 import WorldTile  from './tiles/WorldTile'
 import  PlayerTile  from './tiles/PlayerTile'
-import { TileFlavor, TileMechanicState as TileTransactionState } from './models/tileFlavors'
+import { TileFlavor, TileTransactionState } from './models/tileFlavors'
 import { FloorVoidMaterial } from './materials/FloorVoidMaterial'
 import { FloorGrassMaterial } from './materials/FloorGrassMaterial'
 import { FloorWaterMaterial } from './materials/FloorWaterMaterial'
@@ -67,6 +67,7 @@ function getEffectsForState(state: TileTransactionState): JSX.Element[] {
 const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     const material = getMaterialByFlavor(tile.flavor)
     const effects = getEffectsForState(tile.state)
+    // getTilePlayerAction(tile.id),
 
   if (tile.ownership === 'void') {
     return <VoidTile  material={material} effects={effects} />

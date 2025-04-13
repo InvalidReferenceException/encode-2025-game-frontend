@@ -36,7 +36,7 @@ export default function Scene() {
       <color attach="background" args={['#202030']} />
       <fog attach="fog" args={['#202030', 5, 20]} />
 {/* <ambientLight intensity={0.05} /> */}
-<directionalLight position={[10, 100, 5]} intensity={0.5} castShadow />
+<directionalLight position={[10, 100, 5]} intensity={0.5} castShadow /> 
       {/* <Sky
   sunPosition={[10, 20, 10]}
   turbidity={6}

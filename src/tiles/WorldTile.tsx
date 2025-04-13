@@ -30,7 +30,7 @@ export default function WorldTile({
   onPlayerExit
 }: WorldTileProps) {
   return (
-    <group position={[tilePosition[0], 0, tilePosition[1]]}>
+    <group >
         {effects}
         <RigidBody colliders="cuboid" type="fixed"
         onIntersectionEnter={()=>{

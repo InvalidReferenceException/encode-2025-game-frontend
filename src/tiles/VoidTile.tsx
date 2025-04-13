@@ -4,10 +4,8 @@ import Tile from './Tile'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { JSX, useState } from 'react'
 import { PositionalAudio, SpotLight } from '@react-three/drei'
-import voidSound from './assets/sound/voidSound.mp3'
+import voidSound from '../assets/sound/voidSound.mp3'
 import { useGameContext } from '../context/useGame'
-import { TileSelectionBob } from '../tile_modifiers/TileSelectionBob'
-import { TileSelectionRing } from '../tile_modifiers/TileSelectionRing'
 
 export type AssetProps = {
   modelUrl: string

@@ -41,7 +41,7 @@ export enum TileFlavor {
     VOID = 'void',
 }
 
-export enum TileMechanicState {
+export enum TileTransactionState {
     IDLE = 'idle',
     /// if any tile is crafting, that's added to the hud with a counter of how many tiles are crafting
     CRAFTING = 'crafting',
@@ -58,7 +58,7 @@ export enum TileMechanicState {
 }
 
 export enum TilePlayerAction {
-  IDLE = 'idle',
+  NONE = 'none',
   ENTERED = 'entered',
   SELECTED = 'selected',
   COLLIDED = 'collided',
