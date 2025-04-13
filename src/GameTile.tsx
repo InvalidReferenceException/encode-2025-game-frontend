@@ -70,15 +70,15 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     // getTilePlayerAction(tile.id),
 
   if (tile.ownership === 'void') {
-    return <VoidTile  material={material} effects={effects} />
+    return <VoidTile material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} />
   }
 
   if (tile.ownership === 'world') {
-    return <WorldTile assetUrl={tile.modelUrl} material={material} effects={effects} />
+    return <WorldTile assetUrl={tile.modelUrl} material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}  />
   }
 
   if (tile.ownership === 'player') {
-    return <PlayerTile assetUrl={tile.modelUrl}  material={material} effects={effects}/>
+    return <PlayerTile assetUrl={tile.modelUrl}  material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} />
   }
 
   return null

@@ -13,7 +13,7 @@ export type AssetProps = {
 }
 
 export type PlayerTileProps = {
-  tilePosition?: [number, number]
+  tilePosition: [number, number]
   assetUrl?:string
   material: JSX.Element,
   effects?: React.ReactNode[],
@@ -26,13 +26,13 @@ export default function PlayerTile({
   material,
   effects,
   assetUrl,
-  tilePosition = [0, 0],
+  tilePosition,
   onPlayerEnter,
   onPlayerExit
 }: PlayerTileProps) {
   return (
     <group position={[tilePosition[0], 0, tilePosition[1]]}>
-        {effects}
+     {effects}
             <RigidBody colliders="cuboid" type="fixed"
             onIntersectionEnter={()=>{
               console.log('Intersection ENTER detected!')
@@ -54,7 +54,7 @@ export default function PlayerTile({
         />
       )}
     </RigidBody>
-    </group>
+     </group>
   )
 }
 

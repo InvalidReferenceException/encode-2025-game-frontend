@@ -37,7 +37,7 @@ export default function Tile({
 }: TileProps) {
   const finalColor = color ? color : randomColor();
   return (
-    <group position={[position[0], 0, position[1]]}>
+    <group>
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         {...props}

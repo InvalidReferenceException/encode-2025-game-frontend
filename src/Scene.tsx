@@ -45,7 +45,7 @@ export default function Scene() {
   mieDirectionalG={0.8}
 /> */}
       <WorldMap>
-      {world.tiles.map(tile => (<GameTile tile={tile} />))}
+      {world.tiles.map(tile => (<GameTile tile={tile}  key={tile.id}/>))}
       </WorldMap>
     </>
   )

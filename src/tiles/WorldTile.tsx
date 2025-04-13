@@ -12,7 +12,7 @@ export type AssetProps = {
 }
 
 export type WorldTileProps = {
-  tilePosition?: [number, number]
+  tilePosition: [number, number]
   assetUrl?:string,
   material: JSX.Element
   effects?: React.ReactNode[]
@@ -24,13 +24,13 @@ export type WorldTileProps = {
 export default function WorldTile({
   material,
   effects,
-  tilePosition = [0, 0],
+  tilePosition,
   assetUrl,
   onPlayerEnter,
   onPlayerExit
 }: WorldTileProps) {
   return (
-    <group >
+    <group position={[tilePosition[0], 0, tilePosition[1]]} >
         {effects}
         <RigidBody colliders="cuboid" type="fixed"
         onIntersectionEnter={()=>{

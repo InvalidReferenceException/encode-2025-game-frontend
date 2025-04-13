@@ -15,7 +15,7 @@ export type AssetProps = {
 }
 
 export type VoidTileProps = {
-  tilePosition?: [number, number],
+  tilePosition: [number, number],
   material: JSX.Element
   effects?: React.ReactNode[],
   onSelect?: () => void
@@ -23,7 +23,7 @@ export type VoidTileProps = {
 }
 
 export default function VoidTile({
-  tilePosition = [0, 0],
+  tilePosition,
   material,
   effects,
   onSelect = () => {},
@@ -62,15 +62,7 @@ export default function VoidTile({
         args={[0.5, 1, 0.5]}
         position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall
       />
-        {/* <SpotLight
-        position={[tilePosition[0], 3, tilePosition[1]]}
-        // target={targetRef}
-        angle={0.5}
-        attenuation={5}
-        anglePower={4}
-        intensity={colliding ? 5 : 0}
-        color={"red"}
-      /> */}
+
     </RigidBody>
     </group>
   )
