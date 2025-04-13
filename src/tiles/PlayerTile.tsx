@@ -50,7 +50,6 @@ export default function PlayerTile({
       {assetUrl && (
         <AssetInstance
           modelUrl={assetUrl}
-          position={[tilePosition[0], 0.1, tilePosition[1]]} // Centered on tile
         />
       )}
     </RigidBody>

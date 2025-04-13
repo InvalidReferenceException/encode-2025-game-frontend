@@ -9,14 +9,15 @@ import { FloorGrassMaterial } from './materials/FloorGrassMaterial'
 import { FloorWaterMaterial } from './materials/FloorWaterMaterial'
 import { FloorRockMaterial } from './materials/FloorRockMaterial'
 import { FloorSandMaterial } from './materials/FloorSandMaterial'
+import { useGameContext } from './context/useGame'
 
 type GameTileProps = {
-  tile: TileData
+    tile: TileData
 }
 // Helper to get material by tile flavor
 function getMaterialByFlavor(flavor: TileFlavor): JSX.Element {
     switch (flavor) {
-      case TileFlavor.VOID:
+        case TileFlavor.VOID:
         return <FloorVoidMaterial />
       case TileFlavor.GRASS:
         return <FloorGrassMaterial />
@@ -68,17 +69,27 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     const material = getMaterialByFlavor(tile.flavor)
     const effects = getEffectsForState(tile.state)
     // getTilePlayerAction(tile.id),
+    const { world, player, rentTile, setSelectedTile, setIsCraftModalOpen} = useGameContext()
 
   if (tile.ownership === 'void') {
-    return <VoidTile material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} />
+    return <VoidTile material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} onSelect={() => { 
+        setSelectedTile(tile)
+        setIsCraftModalOpen(true)
+    }}
+    />
   }
 
   if (tile.ownership === 'world') {
-    return <WorldTile assetUrl={tile.modelUrl} material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}  />
+    return <WorldTile assetUrl={tile.modelUrl} material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}  
+    onPlayerEnter={() => {
+        rentTile(tile)
+    }} onPlayerExit={() => {}}
+    />
   }
 
   if (tile.ownership === 'player') {
-    return <PlayerTile assetUrl={tile.modelUrl}  material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} />
+    return <PlayerTile assetUrl={tile.modelUrl}  material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} 
+    onPlayerEnter={()=>{}} onPlayerExit={()=>{}} />
   }
 
   return null

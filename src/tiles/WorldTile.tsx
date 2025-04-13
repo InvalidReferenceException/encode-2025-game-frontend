@@ -49,12 +49,11 @@ export default function WorldTile({
       {assetUrl && (
         <AssetInstance
           modelUrl={assetUrl}
-          position={[tilePosition[0], 0.1, tilePosition[1]]} // Centered on tile
         />
       )}
         <CuboidCollider
            args={[0.5, 1, 0.5]}
-           position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall
+           position={[0.0, 1, 0.0]} // center of collider 1 unit tall
            sensor={true}
          />
        </RigidBody>

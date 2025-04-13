@@ -40,8 +40,10 @@ export default function VoidTile({
 
     <RigidBody colliders="cuboid" type="fixed" onCollisionEnter={()=>{
         console.log('Collision ENTER detected!')
+        setColliding(true)
     }} onCollisionExit={()=>{
         console.log("Collision EXIT detected");
+        setColliding(false)
       }}>
         {isAudioEnabled && <PositionalAudio
         url={voidSound}
@@ -55,12 +57,15 @@ export default function VoidTile({
       />}
       <Tile position={tilePosition} size={1.0} material={material} color='black' onPointerUp={()=> {
         console.log('Pointer UP detected!')
+        // only allow selection if colliding
+        if (colliding){
         onSelect()
+        }
         
       }}/>
       <CuboidCollider
         args={[0.5, 1, 0.5]}
-        position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall
+        position={[0.0, 1, 0.0]} // center of collider 1 unit tall
       />
 
     </RigidBody>
