@@ -44,7 +44,7 @@ import CraftModal from "./CraftModal";
             <button onClick={handleEnableAudio} style={styles.button}>
       Enable Audio
     </button>
-        <button onClick={()=>{
+        {/* <button onClick={()=>{
 // modal with Craft tsx compoent
           console.log("Crafting tile");
           // setShowCraft(true)
@@ -54,8 +54,8 @@ import CraftModal from "./CraftModal";
 
 
         }} style={styles.button}>
-          ✨ Craft
-        </button>
+          ✨ Try
+        </button> */}
         <CraftModal
         open={isCraftModalOpen}
         onClose={() => {
@@ -63,16 +63,15 @@ import CraftModal from "./CraftModal";
           setIsCraftModalOpen(false)
           setSelectedTile(null)
           // setShowCraft(false)
-
         }}
         onCraft={handleCraft}
       />
   
-        <button onClick={()=>{}} style={styles.widget}>
+        <button onClick={()=>{}} style={styles.button}>
           🧱 Tiles: {player.tilesOwned.length}
         </button>
   
-        <button onClick={()=>{}} style={styles.widget}>
+        <button onClick={()=>{}} style={styles.button}>
           🏦 Bank: {player.balance}
         </button>
       </div>
