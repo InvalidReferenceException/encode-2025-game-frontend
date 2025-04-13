@@ -29,7 +29,7 @@ function getMaterialByFlavor(flavor: TileFlavor, isSelected: boolean, isCollidin
      case TileFlavor.ROCK:
         return <FloorRockMaterial  isSelected={isSelected} isColliding={isColliding} isForeign={isForeign} />
     case TileFlavor.SAND:
-        return <FloorSandMaterial   isSelected={isSelected} isColliding={isColliding} isForeign={isForeign}/>
+        return <FloorSandMaterial isSelected={isSelected} isColliding={isColliding} isForeign={isForeign}/>
     case TileFlavor.WATER:
         return <FloorWaterMaterial />
       default:
@@ -148,12 +148,12 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
             )
             break;
         case TilePlayerAction.COLLIDED:
-            effects.push(
-                <mesh key="collided-ring" rotation={[-Math.PI / 2, 0, 0]}>
-                    <ringGeometry args={[0.45, 0.5, 32]} />
-                    <meshBasicMaterial color="red" transparent opacity={0.4} />
-                </mesh>
-            )
+            // effects.push(
+            //     <mesh key="collided-ring" rotation={[-Math.PI / 2, 0, 0]}>
+            //         <ringGeometry args={[0.45, 0.5, 32]} />
+            //         <meshBasicMaterial color="red" transparent opacity={0.4} />
+            //     </mesh>
+            // )
             break;
         case TilePlayerAction.NONE:
             break;
@@ -202,10 +202,11 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
   }
 const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     const { world, player, rentTile, setSelectedTile, setIsCraftModalOpen, selectedTile, playerPositionTile} = useGameContext()
-    const {collidedTile, setCollidedTile} = useState();
+    // const {collidedTile, setCollidedTile} = useState();
+    const [isColliding, setIsColliding] = useState<boolean>(false)
 
     const isSelected = selectedTile?.id === tile.id
-    const isColliding = collidedTile?.id === tile.id
+    // const isColliding = collidedTile?.id === tile.id
     const isCurrent = playerPositionTile?.tile.id === tile.id
 
     const material = getMaterialByFlavor(tile.flavor, isSelected, isColliding, tile.ownership == TileOwnership.WORLD)
@@ -214,21 +215,26 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     // getTilePlayerAction(tile.id),
     
   if (tile.ownership == TileOwnership.VOID) {
-    return <VoidTile material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}
+    return <VoidTile material={material} effects={effects} isColliding={isColliding} tilePosition={[tile.position.x, tile.position.y]}
     onSelect={() => { 
+      
         setSelectedTile(tile)
         setIsCraftModalOpen(true)
     }} 
     onDeselect={() => {
+
         setSelectedTile(null)
         setIsCraftModalOpen(false)
     }
     }
     onCollide={() => {
-        setCollidedTile(tile)
+        setIsColliding(true)
+        // setCollidedTile(tile)
+        console.log('Collision ENTER detected game tile!')
     }}
     onUncollide={() => {
-        setCollidedTile(null)
+        setIsColliding(false)
+        // setCollidedTile(null)
     }}
     />
   }

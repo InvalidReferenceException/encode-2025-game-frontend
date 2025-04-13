@@ -6,11 +6,11 @@ import { useRef } from 'react'
 // 1. Shader material definition
 const VoidShaderMaterial = shaderMaterial(
   {
-    uTime: 0,
+    uTime: { value: 0.0 },
     uColor1: new THREE.Color(0.0, 0.0, 0.0),
     uColor2: new THREE.Color(0.15, 0.0, 0.25),
     uIsSelected: { value: 0.0 },
-    uIsCollided: { value: 0.0 },
+    uIsColliding: { value: 0.0 },
   },
   // Vertex shader
   /* glsl */ `
@@ -47,6 +47,15 @@ const VoidShaderMaterial = shaderMaterial(
 
       float brightness = 1.0 + (uIsColliding * 0.9) + (uIsSelected * 0.9);
       baseColor *= brightness;
+      // if (uIsColliding > 0.5) {
+      //   baseColor.r = 1.0;
+      //   baseColor.g = 0.0;
+      //   baseColor.b = 0.0;
+      // } else {
+      //   baseColor.r = 0.0;
+      //   baseColor.g = 0.0;
+      //   baseColor.b = 1.0;
+      // }
 
       gl_FragColor = vec4(baseColor, 1.0);
     }
@@ -76,7 +85,7 @@ export function FloorVoidMaterial({
       ref.current.uIsColliding = isColliding ? 1.0 : 0.0
     }
   })
-
+console.log("isCollidingInside ", isColliding );
   return (
     <voidShaderMaterial
       ref={ref}
