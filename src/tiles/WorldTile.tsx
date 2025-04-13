@@ -2,6 +2,7 @@ import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Tile from './Tile'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
+import { JSX } from 'react'
 
 export type AssetProps = {
   modelUrl: string
@@ -11,23 +12,26 @@ export type AssetProps = {
 }
 
 export type WorldTileProps = {
-  textureUrl: string
   tilePosition?: [number, number]
-  // tileSize?: number
-  assetUrl?:string
-  isYours:boolean
+  assetUrl?:string,
+  material: JSX.Element
+  effects?: React.ReactNode[]
+
   onPlayerEnter?: () => void
   onPlayerExit?: () => void
 }
 
 export default function WorldTile({
-  textureUrl,
+  material,
+  effects,
   tilePosition = [0, 0],
   assetUrl,
   onPlayerEnter,
   onPlayerExit
 }: WorldTileProps) {
   return (
+    <group position={[tilePosition[0], 0, tilePosition[1]]}>
+        {effects}
         <RigidBody colliders="cuboid" type="fixed"
         onIntersectionEnter={()=>{
           console.log('Intersection ENTER detected!')
@@ -35,13 +39,13 @@ export default function WorldTile({
             onPlayerEnter()
           }
       }}
-onIntersectionExit={()=>{
+    onIntersectionExit={()=>{
           console.log("Intersection EXIT detected");
           if (onPlayerExit) {
               onPlayerExit();
             }
           }}>
-      <Tile position={tilePosition} size={1.0} textureUrl={textureUrl} color='red' />
+      <Tile position={tilePosition} size={1.0} material={material} color='red' />
       {assetUrl && (
         <AssetInstance
           modelUrl={assetUrl}
@@ -53,16 +57,8 @@ onIntersectionExit={()=>{
            position={[tilePosition[0], 1, tilePosition[1]]} // center of collider 1 unit tall
            sensor={true}
          />
-           {/* <SpotLight
-           position={[tilePosition[0], 3, tilePosition[1]]}
-           // target={targetRef}
-           angle={0.5}
-           attenuation={5}
-           anglePower={4}
-           intensity={colliding ? 5 : 0}
-           color={"red"}
-         /> */}
        </RigidBody>
+       </group>
   )
 }
 

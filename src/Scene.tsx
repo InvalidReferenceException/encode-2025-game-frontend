@@ -1,12 +1,13 @@
 // Game.tsx
 import { Environment, Sky} from '@react-three/drei'
 import WorldMap from './WorldMap'
-import WorldTile from './WorldTile'
-import VoidTile from './VoidTile'
+import WorldTile from './tiles/WorldTile'
+import VoidTile from './tiles/VoidTile'
 import { useGameContext } from './context/useGame'
 import { Player } from './Player'
 import { useInputControl } from './useInputControl'
-import PlayerTile from './PlayerTile'
+import PlayerTile from './tiles/PlayerTile'
+import GameTile from './GameTile'
 
 
 export default function Scene() {
@@ -44,42 +45,7 @@ export default function Scene() {
   mieDirectionalG={0.8}
 /> */}
       <WorldMap>
-      {world.tiles.map(tile =>  tile.isOwned ? tile.isYours ?
-              ( 
-                <PlayerTile
-                  key={tile.id}
-                  textureUrl={tile.textureUrl}
-                  tilePosition={[tile.position.x, tile.position.y]}
-                  isYours={tile.isYours}
-                  assetUrl={tile.modelUrl}
-                  // modelUrl={tile.modelUrl}
-                  // isYours={tile.isYours}
-                />  
-              ) :
-       (
-        <WorldTile
-          key={tile.id}
-          textureUrl={tile.textureUrl}
-          tilePosition={[tile.position.x, tile.position.y]}
-          isYours={tile.isYours}
-          assetUrl={tile.modelUrl}
-          onPlayerEnter={() => {
-            console.log("player enter on scene")
-            rentTile(tile);
-          }}
-          // modelUrl={tile.modelUrl}
-        />
-      ) : (
-        <VoidTile
-          key={tile.id}
-          tilePosition={[tile.position.x, tile.position.y]}
-          onSelect={() => {
-            console.log("tile selected on scene")
-            setSelectedTile(tile);
-            setIsCraftModalOpen(true);
-          }}
-        />
-      ))}
+      {world.tiles.map(tile => (<GameTile tile={tile} />))}
       </WorldMap>
     </>
   )

@@ -15,13 +15,6 @@ export type TileVisualState = {
   isColliding: boolean
 }
 
-export type TileFlavor = {
-  textureUrl: string | null
-  modelUrls: string[]
-  positionalSoundUrl?: string
-  soundDistance?: number
-  tags?: string[]
-}
 
 export type TileFlavorData = {
   textureUrl?: string | null
@@ -34,7 +27,13 @@ export type TileFlavorData = {
   tags?: string[]
 }
 
-enum FloorType {
+export enum TileOwnership {
+  VOID = 'void',
+  WORLD = 'world',
+  PLAYER = 'player',
+}
+
+export enum TileFlavor {
     GRASS = 'grass',
     ROCK = 'rock',
     SAND = 'sand',
@@ -42,7 +41,30 @@ enum FloorType {
     VOID = 'void',
 }
 
-function voidFlavor(visual: TileVisualState): TileFlavor {
+export enum TileMechanicState {
+    IDLE = 'idle',
+    /// if any tile is crafting, that's added to the hud with a counter of how many tiles are crafting
+    CRAFTING = 'crafting',
+    /// ephemeral state, resets after animation completes
+    CRAFTING_REJECTED = 'crafting_rejected',
+    /// ephemeral state, resets after animation completes
+    CRAFTING_COMPLETE = 'crafting_complete',
+    /// renting a tile
+    RENTING = 'renting',
+    /// ephemeral state, resets after animation completes
+    RENTING_REJECTED = 'renting_rejected',
+    /// ephemeral state, resets after animation completes
+    CONQUERING_REJECTED = 'conquering_rejected',  
+}
+
+export enum TilePlayerAction {
+  IDLE = 'idle',
+  ENTERED = 'entered',
+  SELECTED = 'selected',
+  COLLIDED = 'collided',
+}
+
+function voidFlavor(visual: TileVisualState): TileStaticData {
   return {
     textureUrl: visual.isSelected
       ? '/assets/textures/selectedTile.jpg'
@@ -63,7 +85,7 @@ function voidFlavor(visual: TileVisualState): TileFlavor {
   }
 }
 
-function worldFlavor(visual: TileVisualState): TileFlavor {
+function worldFlavor(visual: TileVisualState): TileStaticData {
   return {
     textureUrl: visual.isSelected
       ? '/assets/textures/selectedTile.jpg'
@@ -85,7 +107,7 @@ function worldFlavor(visual: TileVisualState): TileFlavor {
   }
 }
 
-function playerFlavor(visual: TileVisualState): TileFlavor {
+function playerFlavor(visual: TileVisualState): TileStaticData {
   return {
     textureUrl: visual.isSelected
       ? '/assets/textures/selectedTile.jpg'
@@ -110,7 +132,7 @@ function playerFlavor(visual: TileVisualState): TileFlavor {
 export function getTileFlavor(
   tileType: TileType,
   visualState: TileVisualState
-): TileFlavor {
+): TileStaticData {
   switch (tileType) {
     case TileType.VOID:
       return voidFlavor(visualState)

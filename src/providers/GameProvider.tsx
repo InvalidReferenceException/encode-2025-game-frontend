@@ -27,8 +27,11 @@ import {
   
   const GameContext = createContext<GameContextType | undefined>(undefined)
   
-  export function GameProvider({ children }: { children: ReactNode }) {
-    const [selectedTile, setSelectedTile] = useState<TileData | null>(null)
+export function GameProvider({ children }: { children: ReactNode }) {
+const [selectedTile, setSelectedTile] = useState<TileData | null>(null)
+// const [collidedTile, setCollidedTile] = useState<TileData | null>(null)
+// const [playerPositionTile, playerPositionTile] = useState<TileData | null>(null)
+
 const [isCraftModalOpen, setIsCraftModalOpen] = useState(false)
 const [isAudioEnabled, setIsAudioEnabled] = useState(false)
 

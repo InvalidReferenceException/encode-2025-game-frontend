@@ -8,7 +8,7 @@ import {
     forwardRef,
     useImperativeHandle,
   } from 'react'
-import Tile, { TileProps } from './Tile'
+import Tile, { TileProps } from './tiles/Tile'
   
   type TilePosition = [number, number]
   

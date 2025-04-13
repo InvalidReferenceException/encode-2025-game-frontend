@@ -2,10 +2,12 @@ import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Tile from './Tile'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
-import { useState } from 'react'
+import { JSX, useState } from 'react'
 import { PositionalAudio, SpotLight } from '@react-three/drei'
 import voidSound from './assets/sound/voidSound.mp3'
-import { useGameContext } from './context/useGame'
+import { useGameContext } from '../context/useGame'
+import { TileSelectionBob } from '../tile_modifiers/TileSelectionBob'
+import { TileSelectionRing } from '../tile_modifiers/TileSelectionRing'
 
 export type AssetProps = {
   modelUrl: string
@@ -16,12 +18,16 @@ export type AssetProps = {
 
 export type VoidTileProps = {
   tilePosition?: [number, number],
+  material: JSX.Element
+  effects?: React.ReactNode[],
   onSelect?: () => void
   onDeselect?: () => void
 }
 
 export default function VoidTile({
   tilePosition = [0, 0],
+  material,
+  effects,
   onSelect = () => {},
   onDeselect = () => {},
 }: VoidTileProps) {
@@ -31,6 +37,9 @@ export default function VoidTile({
   
   
   return (
+    <group position={[tilePosition[0], 0, tilePosition[1]]}>
+    {effects}
+
     <RigidBody colliders="cuboid" type="fixed" onCollisionEnter={()=>{
         console.log('Collision ENTER detected!')
     }} onCollisionExit={()=>{
@@ -46,7 +55,7 @@ export default function VoidTile({
         setRolloffFactor={0.5}
         // {...props} // All THREE.PositionalAudio props are valid
       />}
-      <Tile position={tilePosition} size={1.0} color='black' onPointerUp={()=> {
+      <Tile position={tilePosition} size={1.0} material={material} color='black' onPointerUp={()=> {
         console.log('Pointer UP detected!')
         onSelect()
         
@@ -65,6 +74,7 @@ export default function VoidTile({
         color={"red"}
       /> */}
     </RigidBody>
+    </group>
   )
 }
 

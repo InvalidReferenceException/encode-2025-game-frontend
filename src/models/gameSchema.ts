@@ -1,3 +1,5 @@
+import { TileFlavor, TileOwnership, TilePlayerAction, TileMechanicState } from "./tileFlavors"
+
 // types.ts or inside GameProvider.tsx
 export type TileData = {
     isYours: boolean // whether the tile is owned by the player
@@ -6,9 +8,18 @@ export type TileData = {
     ownerId?: string // optional player or wallet ID
     rent?: number // rent per use
     position: WorldLocationData
-    textureUrl: string // texture image
     modelUrl: string // 3D model .glb
+    ownership: TileOwnership // ownership type (void, world - meaning someone else, player)
+    flavor: TileFlavor // additional data for tile flavor
+    state: TileMechanicState // current state of the tile
+    playerAction: TilePlayerAction // action performed by the player
   }
+
+// tile material
+// potentially a sound effect
+// potentially a bob on top (which could be animated) saying something
+// potentially a modifier showing selection, foreign ownership, etc.
+// the state might be reset after animation ends for example, or after a few seconds
 
 export type PlayerData = {
     id: string // unique identifier for the player address
