@@ -13,6 +13,7 @@ import GameTile from './GameTile'
 export default function Scene() {
   const { world, player, rentTile} = useGameContext()
     const { setSelectedTile, setIsCraftModalOpen } = useGameContext()
+
   const getInput = useInputControl();
   return (
     <>

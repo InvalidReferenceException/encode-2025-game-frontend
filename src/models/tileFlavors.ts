@@ -2,7 +2,15 @@
 // tileFlavors.ts
 
 import { TileData } from '../models/gameSchema'
-
+///! AVOID INFINITE LOOP BY FLAGGING THE TILE UPDATE REASON, whether it was server or client side
+export type PlayerPosition = {
+  tile: TileData
+  updateSource: TileUpdateSource
+}
+export enum TileUpdateSource{
+  CLIENT_MOVEMENT = 'client_movement',
+  SERVER_REJECTED = 'server_rejected',
+}
 export enum TileType {
   VOID = 'void',
   WORLD = 'world',

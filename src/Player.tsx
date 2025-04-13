@@ -1,11 +1,12 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { RigidBody } from "@react-three/rapier";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Vector3 } from "three";
 import { Raycaster, Quaternion } from "three";
 import * as THREE from "three";
 import { useGameContext } from "./context/useGame";
 import { clamp, lerp } from "three/src/math/MathUtils.js";
+import { TileUpdateSource } from "./models/tileFlavors";
 
 export const Player = ({
   walk = 1.0,
@@ -15,7 +16,26 @@ export const Player = ({
   const api = useRef(null); // Reference to the RigidBody API provided by "@react-three/rapier".
   const mesh = useRef(null); // Reference to the 3D mesh of the player character.
   const { scene, camera } = useThree(); // Get the 3D scene and camera provided by "@react-three/fiber".
-  const {player} = useGameContext(); // Get the player object from the game context.
+
+  const { playerPositionTile } = useGameContext()// Get the player position tile from the game context.
+  useEffect(() => {
+    if (!api.current || !playerPositionTile || playerPositionTile.updateSource != TileUpdateSource.SERVER_REJECTED) return
+    console.log("Player position tile updated", playerPositionTile.tile.position)
+    const pos = api.current.translation()
+    const expectedTile = playerPositionTile.tile
+  
+    const isInsideTile =
+      Math.abs(pos.x - expectedTile.position.x) < 0.5 &&
+      Math.abs(pos.z - expectedTile.position.y) < 0.5
+  
+    if (!isInsideTile) {
+      // Snap back to last known good tile
+      if (playerPositionTile) {
+        const { x, y } = playerPositionTile.tile.position
+        api.current.setTranslation({ x, y: 0.2, z: y }, true)
+      }
+    }
+  }, [playerPositionTile])
 
   // if player is not in current tile position update player position to the nearest point in the tile
   // player.currentTilePosition.

@@ -8,12 +8,12 @@ import {
     useRef,
   } from 'react'
   import type { PlayerData, TileData, WorldData, WorldLocationData } from '../models/gameSchema'
-import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor } from '../models/tileFlavors'
+import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor, TileUpdateSource, PlayerPosition } from '../models/tileFlavors'
   
   type GameContextType = {
     player: PlayerData
     world: WorldData
-    movePlayer: (tile: TileData) => void
+    movePlayer: (tile: PlayerPosition) => void
     craftTile: (tile: TileData, prompt: string) => void
     rentTile: (tile: TileData) => void
     conquerTile: (tile: TileData) => void
@@ -24,7 +24,9 @@ import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor } fro
     isCraftModalOpen: boolean
     setIsCraftModalOpen: (v: boolean) => void,
     isAudioEnabled: boolean
-    setIsAudioEnabled: (enabled: boolean) => void
+    setIsAudioEnabled: (enabled: boolean) => void,
+    playerPositionTile: PlayerPosition | null
+    setPlayerPositionTile: (tile: TileData | null) => void
   }
   
   const GameContext = createContext<GameContextType | undefined>(undefined)
@@ -32,7 +34,8 @@ import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor } fro
 export function GameProvider({ children }: { children: ReactNode }) {
 const [selectedTile, setSelectedTile] = useState<TileData | null>(null)
 const [collidedTile, setCollidedTile] = useState<TileData | null>(null)
-const [playerPositionTile, setPlayerPositionTile] = useState<TileData | null>(null)
+const [playerPositionTile, setPlayerPositionTile] = useState<PlayerPosition | null>(null)
+
 
 const [isCraftModalOpen, setIsCraftModalOpen] = useState(false)
 const [isAudioEnabled, setIsAudioEnabled] = useState(false)
@@ -154,16 +157,20 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
     })
   
     const [previousTile, setPreviousTile] = useState<TileData | null>(null)
-    const movePlayer = useCallback((tile: TileData) => {
+    const movePlayer = useCallback((playerPosition : PlayerPosition) => {
       setPreviousTile(player.currentTilePosition)
-      setPlayer(prev => ({ ...prev, currentTilePosition: tile }))
-      setPlayerPositionTile(tile)
+      setPlayer(prev => ({ ...prev, currentTilePosition: playerPosition.tile }))
+      setPlayerPositionTile(playerPosition)
+      if (playerPosition.updateSource === TileUpdateSource.CLIENT_MOVEMENT){
+      //! ONLY IF CLIENT UPDATED THEN CALL THE SERVER TO UPDATE TILE
+      }
     }, [])
   
 
     const rentTile = useCallback(async (tile: TileData) => {
       try {
         console.log("renting tile");
+        let newBalance = player.balance - (tile.rent ?? 0)
         if (tile.ownership == TileOwnership.WORLD && tile.rent){
           setWorld(prev => ({
             ...prev,
@@ -175,13 +182,13 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
           }));
           // add a timeout after which the tile either rents successfully or fails
           setTimeout(() => {
-            if (player.balance < 0) {
+            if (newBalance < 0) {
             setWorld(prev => ({
               ...prev,
               tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.RENTING_REJECTED } : t),
             }))
             if (previousTile) {
-              movePlayer(previousTile!)
+              movePlayer({tile: previousTile!, updateSource: TileUpdateSource.SERVER_REJECTED})
             }
             console.log("Renting failed");
             } 
@@ -301,9 +308,13 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
         setIsCraftModalOpen,
         isAudioEnabled,
         setIsAudioEnabled,
+        playerPositionTile,
+        setPlayerPositionTile,
+        getTilePlayerAction,
+      
       }),
       [player, world, movePlayer, rentTile, craftTile,conquerTile,  refreshPlayerFromBackend, refreshWorldFromBackend, selectedTile, setSelectedTile, isCraftModalOpen, setIsCraftModalOpen,   isAudioEnabled,
-        setIsAudioEnabled]
+        setIsAudioEnabled, playerPositionTile, setPlayerPositionTile, getTilePlayerAction]
     )
   
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>
