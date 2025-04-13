@@ -183,6 +183,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
             if (previousTile) {
               movePlayer(previousTile!)
             }
+            console.log("Renting failed");
             } 
         }, 3000)
         }
@@ -209,6 +210,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
               ...prev,
               tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CONQUERING_REJECTED } : t),
             }))
+            console.log("Conquering failed");
             } else {
               setWorld(prev => ({
                 ...prev,
@@ -218,6 +220,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
                 ...prev,
                 tilesOwned: [...prev.tilesOwned, tile],
               }))
+              console.log("Conquering successful");
             }
         }, 3000)
         }
@@ -246,6 +249,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
               ...prev,
               tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CRAFTING_REJECTED } : t),
             }))
+            console.log("Crafting failed");
             } else {
               setWorld(prev => ({
                 ...prev,
@@ -259,6 +263,7 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
                 ...prev,
                 tilesOwned: [...prev.tilesOwned, tile],
               }))
+              console.log("Crafting successful");
             }
         }, 3000)
         }
