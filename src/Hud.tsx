@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useGameContext } from "./context/useGame";
 import CraftModal from "./CraftModal";
+import tileIcon from './assets/icons/tile-icon.png'
+import quarkIcon from './assets/icons/quark-coin.png'
 
 export default function Hud() {
   const {
@@ -43,18 +45,20 @@ export default function Hud() {
       {/* Top-right Audio Toggle */}
       <div style={styles.audioToggle}>
         <button onClick={handleEnableAudio} style={styles.button}>
-          {isAudioEnabled ? "🔊 Audio On" : "🔇 Enable Audio"}
+          {isAudioEnabled ? "🔊" : "🔇"}
         </button>
       </div>
 
       {/* Bottom-right Tile + Bank Info */}
       <div style={styles.bottomRight}>
-        <button onClick={() => {}} style={styles.button}>
-          🧱 Tiles: {player.tilesOwned.length}
-        </button>
-        <button onClick={() => {}} style={styles.button}>
-          🏦 Bank: {player.balance}
-        </button>
+      <button onClick={() => {}} style={styles.button}>
+    <img src={tileIcon} alt="tiles" style={styles.icon} />
+    {player.tilesOwned.length}
+  </button>
+  <button onClick={() => {}} style={styles.button}>
+    <img src={quarkIcon} alt="quarks" style={styles.icon} />
+    {player.balance}
+  </button>
       </div>
 
       {/* Craft Modal */}
@@ -82,17 +86,24 @@ const styles = {
     bottom: 20,
     right: 20,
     display: "flex",
-    gap: "12px",
+    gap: "20px", // slightly bigger gap for bigger buttons
     zIndex: 1000,
   },
   button: {
-    padding: "8px 12px",
-    fontSize: "14px",
-    fontWeight: "bold" as const,
+    padding: "32px 48px", // 4x the original size
+    fontSize: "24px",      // larger text
+    fontWeight: 900 as const, // extra bold
+    color: "white",
     cursor: "pointer",
-    borderRadius: "8px",
-    background: "rgba(255,255,255,0.9)",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-    border: "1px solid #ddd",
+    borderRadius: "16px",
+    background: "transparent",
+    border: "0px solid white",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  icon: {
+    width: '48px',
+    height: '48px',
   },
 };
