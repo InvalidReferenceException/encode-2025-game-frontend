@@ -9,8 +9,8 @@ const VoidShaderMaterial = shaderMaterial(
     uTime: 0,
     uColor1: new THREE.Color(0.0, 0.0, 0.0),
     uColor2: new THREE.Color(0.15, 0.0, 0.25),
-    uIsSelected: 0,
-    uIsColliding: 0
+    uIsSelected: { value: 0.0 },
+    uIsCollided: { value: 0.0 },
   },
   // Vertex shader
   /* glsl */ `
@@ -45,7 +45,7 @@ const VoidShaderMaterial = shaderMaterial(
       vec3 rimColor = uColor2 * (1.0 - blackHole) * glow * band;
       vec3 baseColor = mix(rimColor, uColor1, blackHole);
 
-      float brightness = 1.0 + (uIsColliding * 0.2) + (uIsSelected * 0.5);
+      float brightness = 1.0 + (uIsColliding * 0.9) + (uIsSelected * 0.9);
       baseColor *= brightness;
 
       gl_FragColor = vec4(baseColor, 1.0);
@@ -80,6 +80,8 @@ export function FloorVoidMaterial({
   return (
     <voidShaderMaterial
       ref={ref}
+      isSelected={isSelected ? 1.0 : 0.0}
+      isColliding={isColliding ? 1.0 : 0.0}
       {...props}
     />
   )

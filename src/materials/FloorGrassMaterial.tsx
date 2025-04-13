@@ -1,17 +1,18 @@
 import { useLoader } from '@react-three/fiber'
 import { Color, TextureLoader } from 'three'
-import grassTextureURL from '../assets/textures/grass.png'
 import { JSX } from 'react'
-import { TileBlendMaterial, TileMaterialProps } from './TileBlendMaterial'
+import { TextureType, TileBlendMaterial, TileMaterialProps } from './TileBlendMaterial'
+import { Texture } from '@react-three/drei'
 
 export function FloorGrassMaterial(props: TileMaterialProps) {
-  const texture = useLoader(TextureLoader, grassTextureURL)
+
 //   const texture = useLoader<Texture, string>(TextureLoader, grassTextureURL)
   // Optional: wrap texture repeat if needed
 //   texture.wrapS = texture.wrapT = THREE.RepeatWrapping
 //   texture.repeat.set(2, 2)
+console.log("isForeign Floor Grass ", props.isForeign);
 return <TileBlendMaterial
-  uTexture={texture}
+  textureType={TextureType.Grass}
   uNeighborColors={[
     new Color('#ccc'),
     new Color('#bbb'),

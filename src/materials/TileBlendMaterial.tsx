@@ -1,119 +1,162 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { shaderMaterial } from '@react-three/drei'
-import { extend, ReactThreeFiber } from '@react-three/fiber'
+import { extend, ReactThreeFiber, useLoader } from '@react-three/fiber'
 type Props = JSX.IntrinsicElements['shaderMaterial']
 
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
 
+import grassTextureURL from '../assets/textures/grass.png'
+import sandTextureURL from '../assets/textures/sand.png'
+import rockTextureURL from '../assets/textures/rock.png'
+
+export const enum TextureType {
+    Grass = 0,
+    Sand = 1,
+    Rock = 2,
+    Water = 3,
+    Void = 4,
+    }
+const textureUrls = {
+    [TextureType.Grass]: grassTextureURL,
+    [TextureType.Sand]: sandTextureURL,
+    [TextureType.Rock]: rockTextureURL,
+    [TextureType.Water]: null,
+    [TextureType.Void]: null,
+  }
+
+
+  export type TileBlendShaderMaterial = ReactThreeFiber.Object3DNode<typeof TileBlendShaderMaterial, typeof TileBlendShaderMaterial>
+  // Extend the shader material to be used in JSX
+  // This allows us to use <tileBlendShaderMaterial /> in our components
+  // and have TypeScript recognize it as a valid element
+
 export type TileMaterialProps = JSX.IntrinsicElements['tileBlendShaderMaterial'] & {
     isSelected?: boolean
     isCollided?: boolean
     isForeign?: boolean
+    textureType: TextureType
   }
 
-export function TileBlendMaterial({
-  isSelected = false,
-  isCollided = false,
-  isForeign = false,
-  ...props
-}: TileMaterialProps) {
-  const ref = useRef<any>(null)
+  export function TileBlendMaterial({
+    isSelected = false,
+    isCollided = false,
+    isForeign = false,
+    textureType,
+    ...props
+  }: TileMaterialProps) {
+    const ref = useRef<any>(null)
 
-  useFrame(({ clock }) => {
-    if (ref.current) {
-      ref.current.uTime = clock.getElapsedTime()
-      ref.current.uIsSelected = isSelected ? 1.0 : 0.0
-      ref.current.uIsCollided = isCollided ? 1.0 : 0.0
-      ref.current.uIsForeign = isForeign ? 1.0 : 0.0
+    const textures = {
+      [TextureType.Grass]: useLoader(THREE.TextureLoader, textureUrls[TextureType.Grass]),
+      [TextureType.Sand]: useLoader(THREE.TextureLoader, textureUrls[TextureType.Sand]),
+      [TextureType.Rock]: useLoader(THREE.TextureLoader, textureUrls[TextureType.Rock]),
     }
-  })
-
-  return (
-    <tileBlendShaderMaterial
-      ref={ref}
-      {...props}
-    />
-  )
-}
+  
+    useFrame(({ clock }) => {
+      if (ref.current) {
+        ref.current.uniforms.uTime.value = clock.getElapsedTime();
+        ref.current.uniforms.uIsSelected = isSelected ? 1.0 : 0.0;
+        ref.current.uniforms.uIsCollided = isCollided ? 1.0 : 0.0;
+        // ref.current.uniforms.uIsForeign = isForeign ? 1.0 : 0.0;
+        ref.current.uniforms.uTextureTypeIndex.value = textureType;
+        // console.log("isForeign ", isForeign );
+      }
+    });
+  
+    console.log("isForeignInside ", isForeign );
+    return (
+      <tileBlendShaderMaterial
+        ref={ref}
+        uTextureTypeIndex={textureType}
+        uTextures0={textures[TextureType.Grass]}
+        uTextures1={textures[TextureType.Sand]}
+        uTextures2={textures[TextureType.Rock]}
+        uIsSelected={isSelected ? 1.0 : 0.0}
+        uIsCollided={isCollided ? 1.0 : 0.0}
+        uIsForeign={isForeign ? 1.0 : 0.0}
+        {...props}
+      />
+    )
+  }
 
 const TileBlendShaderMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uTexture: null,
-    uNeighborColors: [
-      new THREE.Color(),
-      new THREE.Color(),
-      new THREE.Color(),
-      new THREE.Color()
-    ],
-    uIsSelected: 0,
-    uIsCollided: 0,
-    uIsForeign: 0
-  },
-  // Vertex Shader
-  /* glsl */ `
-    varying vec2 vUv;
-
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-  // Fragment Shader
-  /* glsl */ `
-  uniform float uTime;
-  uniform sampler2D uTexture;
-  uniform vec3 uNeighborColors[4]; // top, right, bottom, left
-  uniform float uIsSelected;
-  uniform float uIsCollided;
-  uniform float uIsForeign;
-  varying vec2 vUv;
-
-  void main() {
-    vec4 baseColor = texture2D(uTexture, vUv);
-
-    // Edge blending
-    float edgeThreshold = 0.2;
-    float fadeTop = smoothstep(0.0, edgeThreshold, vUv.y);
-    float fadeBottom = smoothstep(1.0, 1.0 - edgeThreshold, vUv.y);
-    float fadeLeft = smoothstep(0.0, edgeThreshold, vUv.x);
-    float fadeRight = smoothstep(1.0, 1.0 - edgeThreshold, vUv.x);
-
-    vec3 blended = baseColor.rgb;
-    blended = mix(blended, uNeighborColors[0], 1.0 - fadeTop);
-    blended = mix(blended, uNeighborColors[1], 1.0 - fadeRight);
-    blended = mix(blended, uNeighborColors[2], 1.0 - fadeBottom);
-    blended = mix(blended, uNeighborColors[3], 1.0 - fadeLeft);
-
-    // Lighten if collided
-    if (uIsCollided > 0.5) {
-      blended += 0.2;
-    }
-
-    // Shadow tinting (ONLY affect shadows, not rim or bands)
-    float luminance = (blended.r + blended.g + blended.b) / 3.0;
-    float shadow = 1.0 - luminance;
-
-    // If foreign: red shadow tint only
-    if (uIsForeign > 0.5) {
-      blended.r += shadow * 0.3;
-      blended.g -= shadow * 0.1;
-      blended.b -= shadow * 0.1;
-    }
-
-    // If selected: blue shadow tint only
-    if (uIsSelected > 0.5) {
-      blended.b += shadow * 0.3;
-      blended.r -= shadow * 0.1;
-      blended.g -= shadow * 0.1;
-    }
-
-    gl_FragColor = vec4(blended, baseColor.a);
-  }
-  `
-)
+    {
+      uTime: { value: 0 },
+      uTextureTypeIndex: { value: 0 },
+      uTextures0: { value: null },
+      uTextures1: { value: null },
+      uTextures2: { value: null },
+      uIsSelected: { value: 0.0 },
+      uIsCollided: { value: 0.0 },
+      uIsForeign: { value: 0.0 },
+      uNeighborColors: {
+        value: [
+          new THREE.Color(),
+          new THREE.Color(),
+          new THREE.Color(),
+          new THREE.Color()
+        ]
+      },
+    },
+    /* vertex shader */ `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    /* fragment shader */ `
+      uniform float uTime;
+      uniform int uTextureTypeIndex;
+      uniform sampler2D uTextures0;
+      uniform sampler2D uTextures1;
+      uniform sampler2D uTextures2;
+      uniform vec3 uNeighborColors[4];
+      uniform float uIsSelected;
+      uniform float uIsCollided;
+      uniform float uIsForeign;
+      varying vec2 vUv;
+  
+      void main() {
+        vec4 baseColor;
+  
+        if (uTextureTypeIndex == 0) {
+        baseColor = texture2D(uTextures0, vUv);
+        } else if (uTextureTypeIndex == 1) {
+        baseColor = texture2D(uTextures1, vUv);
+        } else {
+        baseColor = texture2D(uTextures2, vUv);
+        }
+  
+        vec3 blended = baseColor.rgb;
+  
+        // if (uIsCollided > 0.5) {
+        //   blended += 0.2;
+        // }
+  
+        float luminance = dot(baseColor.rgb, vec3(0.299, 0.587, 0.114));
+        float darkness = 1.0 - luminance;
+        
+        if (uIsForeign > 0.5) {
+          float flatten = (luminance - 0.5) * 0.6; // shrink contrast around mid-gray
+          blended -= vec3(flatten);
+          // blended.r -= darkness * 0.3;
+          // blended.g -= darkness * 0.5;
+          // blended.b -= darkness * 0.5;
+        } 
+  
+        // if (uIsSelected > 0.5) {
+        //   blended.b += darkness * 0.3;
+        //   blended.r -= darkness * 0.1;
+        //   blended.g -= darkness * 0.1;
+        // }
+  
+        gl_FragColor = vec4(blended, baseColor.a);
+      }
+    `
+  )
 
 extend({ TileBlendShaderMaterial })
 

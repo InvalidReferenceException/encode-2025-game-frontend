@@ -1,11 +1,10 @@
 import { useLoader } from '@react-three/fiber'
 import { Color, TextureLoader } from 'three'
-import grassTextureURL from '../assets/textures/rock.png'
 import { JSX } from 'react'
-import { TileBlendMaterial, TileMaterialProps } from './TileBlendMaterial'
+import { TextureType, TileBlendMaterial, TileMaterialProps } from './TileBlendMaterial'
+import { Texture } from '@react-three/drei'
 
 export function FloorRockMaterial(props: TileMaterialProps) {
-  const texture = useLoader(TextureLoader, grassTextureURL)
 //   const texture = useLoader<Texture, string>(TextureLoader, grassTextureURL)
   // Optional: wrap texture repeat if needed
 //   texture.wrapS = texture.wrapT = THREE.RepeatWrapping
@@ -13,7 +12,7 @@ export function FloorRockMaterial(props: TileMaterialProps) {
 
   // return <meshStandardMaterial map={texture} {...props} />
   return <TileBlendMaterial
-    uTexture={texture}
+    textureType={TextureType.Rock}
     uNeighborColors={[
       new Color('#ccc'),
       new Color('#bbb'),
