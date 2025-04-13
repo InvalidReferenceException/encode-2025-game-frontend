@@ -11,6 +11,8 @@ import { FloorRockMaterial } from './materials/FloorRockMaterial'
 import { FloorSandMaterial } from './materials/FloorSandMaterial'
 import { useGameContext } from './context/useGame'
 import Tile from './tiles/Tile'
+import { NormalizedAsset } from './NormalizedAsset'
+import TileBoxShell from './tile_modifiers/TileBoxShell'
 
 type GameTileProps = {
     tile: TileData
@@ -39,10 +41,10 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
     const effects: JSX.Element[] = []
     if(isWorldTile){
         effects.push(
-            <mesh key="world-tile" rotation={[-Math.PI / 2, 0, 0]}>
-                <ringGeometry args={[0.45, 0.5, 32]} />
-                <meshBasicMaterial color="white" transparent opacity={0.4} />
-            </mesh>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial color={"red"} transparent opacity={0.3} depthWrite={false} />
+          </mesh>
         )
     }
     switch (tileState) {
@@ -72,10 +74,19 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
             break;
         case TileTransactionState.RENTING:
             effects.push(
+                <group>
+                <TileBoxShell thickness={0.1} size={1.0} height={0.01} color="blue" opacity={0.9} />
                 <mesh key="renting-ring" rotation={[-Math.PI / 2, 0, 0]}>
                     <ringGeometry args={[0.45, 0.5, 32]} />
                     <meshBasicMaterial color="blue" transparent opacity={0.4} />
                 </mesh>
+                <mesh key="renting-sphere" position={[0, 1.0, 0]}>
+                    {/* <sphereGeometry args={[0.1, 100, 100]} /> */}
+                    <NormalizedAsset url="/assets/glb_models/star.glb" scale={[10.1, 10.1, 10.1]} />
+                    <meshBasicMaterial color="white"/>
+                </mesh>
+
+                </group>
             )
             break;
         case TileTransactionState.RENTING_REJECTED:
@@ -199,7 +210,7 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     const effects = getEffectsForTile(tile.state, playerAction, tile.ownership == TileOwnership.WORLD)
     // getTilePlayerAction(tile.id),
     
-  if (tile.ownership === 'void') {
+  if (tile.ownership == TileOwnership.VOID) {
     return <VoidTile material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}
     onSelect={() => { 
         setSelectedTile(tile)
@@ -220,7 +231,7 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     />
   }
 
-  if (tile.ownership === 'world') {
+  if (tile.ownership == TileOwnership.WORLD) {
     return <WorldTile assetUrl={tile.modelUrl} material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}  
     onPlayerEnter={() => {
         
@@ -231,7 +242,7 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
     />
   }
 
-  if (tile.ownership === 'player') {
+  if (tile.ownership == TileOwnership.PLAYER) {
     return <PlayerTile assetUrl={tile.modelUrl}  material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]} 
 
     onPlayerEnter={()=>{}} onPlayerExit={()=>{}} />
