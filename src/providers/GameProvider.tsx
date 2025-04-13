@@ -55,16 +55,45 @@ const [isAudioEnabled, setIsAudioEnabled] = useState(false)
        ownership: TileOwnership.PLAYER,
        flavor: TileFlavor.SAND,
        state: TileTransactionState.IDLE,
-      }],
-      currentTilePosition:{
+      },
+      {
         rent: 20,
-        id: "zz3hihf",
-        position: {x: 0, y: 0},
+        id: "ba55c45e005c",
+        position: { x: 2, y: 4 },
+        modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
+        ownership: TileOwnership.PLAYER,
+        flavor: TileFlavor.GRASS,
+        state: TileTransactionState.IDLE
+      },
+      {
+        rent: 20,
+        id: "12se00vihf",
+        position: { x: 2, y: 2 },
+        modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//log-house.glb",
+        ownership: TileOwnership.PLAYER,
+        flavor: TileFlavor.GRASS,
+        state: TileTransactionState.IDLE
+      },
+      {
+        rent: 20,
+        id: "12se1197hf",
+        position: { x: 1, y: 2 },
         modelUrl: "",
         ownership: TileOwnership.PLAYER,
-        flavor: TileFlavor.SAND,
-        state: TileTransactionState.IDLE,
-       },
+        flavor: TileFlavor.GRASS,
+        state: TileTransactionState.IDLE
+      },
+    ],
+      currentTilePosition:      {
+        rent: 20,
+        id: "ba55c45e005c",
+        position: { x: 2, y: 4 },
+        modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
+        ownership: TileOwnership.PLAYER,
+        flavor: TileFlavor.GRASS,
+        state: TileTransactionState.IDLE
+      },
+      
     },
 )
   
@@ -388,9 +417,9 @@ const [isAudioEnabled, setIsAudioEnabled] = useState(false)
       rent: 20,
       id: "12se00vihf",
       position: { x: 2, y: 2 },
-      modelUrl: "",
-      ownership: TileOwnership.VOID,
-      flavor: TileFlavor.VOID,
+      modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//log-house.glb",
+      ownership: TileOwnership.PLAYER,
+      flavor: TileFlavor.GRASS,
       state: TileTransactionState.IDLE
     },
     {
@@ -407,17 +436,17 @@ const [isAudioEnabled, setIsAudioEnabled] = useState(false)
       id: "12se1197hf",
       position: { x: 1, y: 2 },
       modelUrl: "",
-      ownership: TileOwnership.VOID,
-      flavor: TileFlavor.VOID,
+      ownership: TileOwnership.PLAYER,
+      flavor: TileFlavor.GRASS,
       state: TileTransactionState.IDLE
     },
     {
       rent: 20,
-      id: "970b9e0e7e5f",
+      id: "970b9ehud0e7e5f",
       position: { x: 0, y: 3 },
-      modelUrl: "",
-      ownership: TileOwnership.VOID,
-      flavor: TileFlavor.VOID,
+      modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
+      ownership: TileOwnership.WORLD,
+      flavor: TileFlavor.GRASS,
       state: TileTransactionState.IDLE
     },
     {
@@ -460,9 +489,9 @@ const [isAudioEnabled, setIsAudioEnabled] = useState(false)
       rent: 20,
       id: "ba55c45e005c",
       position: { x: 2, y: 4 },
-      modelUrl: "",
-      ownership: TileOwnership.VOID,
-      flavor: TileFlavor.VOID,
+      modelUrl: "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb",
+      ownership: TileOwnership.PLAYER,
+      flavor: TileFlavor.GRASS,
       state: TileTransactionState.IDLE
     },
     {

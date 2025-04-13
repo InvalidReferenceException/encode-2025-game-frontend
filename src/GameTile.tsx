@@ -43,7 +43,7 @@ function getEffectsForTile(tileState: TileTransactionState, playerAction: TilePl
         effects.push(
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]}>
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial color={"red"} transparent opacity={0.3} depthWrite={false} />
+            <meshBasicMaterial color={"red"} transparent opacity={0.2} depthWrite={false} />
           </mesh>
         )
     }

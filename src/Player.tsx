@@ -135,7 +135,7 @@ camera.lookAt(newPosition);
           penumbra={0.2}
           decay={3.0} 
           distance={10.0}
-          intensity={8}
+          intensity={15}
           castShadow
           target={mesh.current} // Look at the player
         />
