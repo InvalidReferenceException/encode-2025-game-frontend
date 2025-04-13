@@ -82,6 +82,7 @@ const GameTile: React.FC<GameTileProps> = ({ tile }) => {
   if (tile.ownership === 'world') {
     return <WorldTile assetUrl={tile.modelUrl} material={material} effects={effects} tilePosition={[tile.position.x, tile.position.y]}  
     onPlayerEnter={() => {
+        
         rentTile(tile)
     }} onPlayerExit={() => {}}
     />

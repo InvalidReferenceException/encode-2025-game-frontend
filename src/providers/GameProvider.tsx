@@ -5,6 +5,7 @@ import {
     ReactNode,
     useMemo,
     useCallback,
+    useRef,
   } from 'react'
   import type { PlayerData, TileData, WorldData, WorldLocationData } from '../models/gameSchema'
 import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor } from '../models/tileFlavors'
@@ -12,7 +13,7 @@ import { TileTransactionState, TilePlayerAction, TileOwnership, TileFlavor } fro
   type GameContextType = {
     player: PlayerData
     world: WorldData
-    movePlayer: (position: WorldLocationData) => void
+    movePlayer: (tile: TileData) => void
     craftTile: (tile: TileData, prompt: string) => void
     rentTile: (tile: TileData) => void
     conquerTile: (tile: TileData) => void
@@ -152,18 +153,38 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
     ],
     })
   
-    const movePlayer = useCallback((position: WorldLocationData) => {
-      setPlayer(prev => ({ ...prev, position }))
+    const [previousTile, setPreviousTile] = useState<TileData | null>(null)
+    const movePlayer = useCallback((tile: TileData) => {
+      setPreviousTile(player.currentTilePosition)
+      setPlayer(prev => ({ ...prev, currentTilePosition: tile }))
+      setPlayerPositionTile(tile)
     }, [])
   
+
     const rentTile = useCallback(async (tile: TileData) => {
       try {
         console.log("renting tile");
-        if (tile.isYours == false && tile.rent){
+        if (tile.ownership == TileOwnership.WORLD && tile.rent){
+          setWorld(prev => ({
+            ...prev,
+            tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.RENTING } : t),
+          }))
           setPlayer(prev => ({
             ...prev,
             balance: prev.balance - tile.rent!,
           }));
+          // add a timeout after which the tile either rents successfully or fails
+          setTimeout(() => {
+            if (player.balance < 0) {
+            setWorld(prev => ({
+              ...prev,
+              tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.RENTING_REJECTED } : t),
+            }))
+            if (previousTile) {
+              movePlayer(previousTile!)
+            }
+            } 
+        }, 3000)
         }
 
       } catch (err) {
@@ -173,9 +194,28 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
   
     const conquerTile = useCallback(async (tile: TileData) => {
       try {
-        console.log("renting tile");
-        if (tile.isYours == false && tile.rent){
-          player.balance -= tile.rent;
+        console.log("conquering tile");
+        if (tile.ownership == TileOwnership.WORLD){
+          setWorld(prev => ({
+            ...prev,
+            tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CONQUERING } : t),
+          }))
+          // add a timeout after which the tile either rents successfully or fails
+          setTimeout(() => {
+            // randomly set true or false by flipping a coin
+            const random = Math.random() < 0.5
+            if (random) {
+            setWorld(prev => ({
+              ...prev,
+              tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CONQUERING_REJECTED } : t),
+            }))
+            } else {
+              setWorld(prev => ({
+                ...prev,
+                tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CONQUERING_COMPLETE } : t),
+              }))
+            }
+        }, 3000)
         }
 
       } catch (err) {
@@ -185,9 +225,30 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
 
     const craftTile = useCallback(async (tile: TileData, prompt: string) => {
       try {
-        console.log("renting tile");
-        if (tile.isYours == false && tile.rent){
-          player.balance -= tile.rent;
+        console.log("crafting tile");
+        if (tile.ownership == TileOwnership.VOID){
+          setWorld(prev => ({
+            ...prev,
+            tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CRAFTING } : t),
+          }))
+          setPlayer(prev => ({
+            ...prev,
+            balance: prev.balance - 100,
+          }));
+          // add a timeout after which the tile either rents successfully or fails
+          setTimeout(() => {
+            if (player.balance < 0) {
+            setWorld(prev => ({
+              ...prev,
+              tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CRAFTING_REJECTED } : t),
+            }))
+            } else {
+              setWorld(prev => ({
+                ...prev,
+                tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CRAFTING_COMPLETE } : t),
+              }))
+            }
+        }, 3000)
         }
 
       } catch (err) {

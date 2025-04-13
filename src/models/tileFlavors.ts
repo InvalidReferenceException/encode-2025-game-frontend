@@ -53,8 +53,12 @@ export enum TileTransactionState {
     RENTING = 'renting',
     /// ephemeral state, resets after animation completes
     RENTING_REJECTED = 'renting_rejected',
+    /// conquering a tile
+    CONQUERING = 'conquering',
     /// ephemeral state, resets after animation completes
     CONQUERING_REJECTED = 'conquering_rejected',  
+    /// ephemeral state, resets after animation completes
+    CONQUERING_COMPLETE = 'conquering_complete',
 }
 
 export enum TilePlayerAction {
