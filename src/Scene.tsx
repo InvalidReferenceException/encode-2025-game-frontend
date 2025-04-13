@@ -1,5 +1,5 @@
 // Game.tsx
-import { Environment, Sky} from '@react-three/drei'
+import { Environment, OrbitControls, Sky} from '@react-three/drei'
 import WorldMap from './WorldMap'
 import WorldTile from './tiles/WorldTile'
 import VoidTile from './tiles/VoidTile'
@@ -23,6 +23,7 @@ export default function Scene() {
         <boxGeometry args={[2, 2, 2]} />
         <meshStandardMaterial/>
       </mesh> */}
+      <OrbitControls makeDefault />
     <Player  input={getInput}/>
     
 {/* <Environment
