@@ -214,6 +214,10 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
                 ...prev,
                 tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CONQUERING_COMPLETE } : t),
               }))
+              setPlayer(prev => ({
+                ...prev,
+                tilesOwned: [...prev.tilesOwned, tile],
+              }))
             }
         }, 3000)
         }
@@ -246,6 +250,14 @@ function getTilePlayerAction(tileId: string): TilePlayerAction {
               setWorld(prev => ({
                 ...prev,
                 tiles: prev.tiles.map(t => t.id === tile.id ? { ...t, state: TileTransactionState.CRAFTING_COMPLETE } : t),
+              }))
+              // spoofing crafted tile
+              tile.ownership = TileOwnership.PLAYER
+              tile.flavor = TileFlavor.GRASS
+              tile.modelUrl = "https://plvhqthnttjouhndvgyu.supabase.co/storage/v1/object/public/encode-assets//SM_CommonHazel_Seedling_03_PP.glb"
+              setPlayer(prev => ({
+                ...prev,
+                tilesOwned: [...prev.tilesOwned, tile],
               }))
             }
         }, 3000)

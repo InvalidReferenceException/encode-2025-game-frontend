@@ -8,10 +8,8 @@ function App() {
   // This reference gives us direct access to the THREE.Mesh object
   const ref = useRef()
 
-
-
-
   return (
+
     <GameProvider>
       
           <Game/>
