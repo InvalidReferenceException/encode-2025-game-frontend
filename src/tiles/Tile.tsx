@@ -2,19 +2,6 @@
 import { useTexture } from "@react-three/drei";
 import { JSX, useRef } from "react";
 
-import { useFrame, useLoader } from "@react-three/fiber";
-import { FloorVoidMaterial } from "../materials/FloorVoidMaterial";
-
-import * as THREE from "three";
-import { NormalizedAsset } from "../NormalizedAsset";
-import { Texture, TextureLoader } from "three";
-import { FloorGrassMaterial } from "../materials/FloorGrassMaterial";
-import { FloorRockMaterial } from "../materials/FloorRockMaterial";
-import { FloorSandMaterial } from "../materials/FloorSandMaterial";
-import { FloorWaterMaterial } from "../materials/FloorWaterMaterial";
-import { TileSelectionRing } from "../tile_modifiers/TileSelectionRing";
-import { TileSelectionBob } from "../tile_modifiers/TileSelectionBob";
-
 export type TileProps = {
   position?: [number, number];
   size?: number;
